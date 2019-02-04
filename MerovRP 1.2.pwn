@@ -130,7 +130,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Ď
 					SCM(playerid, ColorGreen, !"Âű íč÷ĺăî íĺ ââĺëč");
 					DialogRegistration(playerid);
 					return true;
-			   	}
+			   	} 
 			   	if(!(6 <= len <= 32))
 			   	{
 			   	    SCM(playerid, ColorGreen, !"Íĺâĺđíŕ˙ äëčíŕ ďŕđîë˙");
