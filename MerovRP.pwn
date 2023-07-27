@@ -1,6 +1,6 @@
 //Admin Skin - 98
 //MerovRP v1.3
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Инклуды ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ РРЅРєР»СѓРґС‹ ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include 			<a_samp>
 #include 			<a_mysql>
 #include 			<foreach>
@@ -8,12 +8,12 @@
 #include 			<Pawn.CMD>
 #include 			<sscanf2>
 #include 			<streamer>
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ База данных ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define MySQL_HOST 	"127.0.0.1" //Дефайны, константы, которые используем вместо переменных в функциях
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Р‘Р°Р·Р° РґР°РЅРЅС‹С… ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#define MySQL_HOST 	"127.0.0.1" //Р”РµС„Р°Р№РЅС‹, РєРѕРЅСЃС‚Р°РЅС‚С‹, РєРѕС‚РѕСЂС‹Рµ РёСЃРїРѕР»СЊР·СѓРµРј РІРјРµСЃС‚Рѕ РїРµСЂРµРјРµРЅРЅС‹С… РІ С„СѓРЅРєС†РёСЏС…
 #define MySQL_USER 	"root"
 #define MySQL_DB 	"MerovRP"
 #define MySQL_PASS  ""
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Цвета ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Р¦РІРµС‚Р° ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define ColorWhite	0xFFFFFFFF
 #define ColorGrey   0xA6A69FFF
 #define ColorGrey2 	0xC8C8C8C8
@@ -62,9 +62,9 @@
 #define TEAM_ARM 0x00671FAA
 #define TEAM_FBI 0x0063AFAA
 #define TEAM_COP 0x0100F6AA
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Дефайны ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Р”РµС„Р°Р№РЅС‹ ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define GM_NAME			!"=== [MerovRP v1.3] ==="
-#define GN(%0)			player_name[%0]//Дефайн с параментром, %0 - парядковый номер аргумента функции
+#define GN(%0)			player_name[%0]//Р”РµС„Р°Р№РЅ СЃ РїР°СЂР°РјРµРЅС‚СЂРѕРј, %0 - РїР°СЂСЏРґРєРѕРІС‹Р№ РЅРѕРјРµСЂ Р°СЂРіСѓРјРµРЅС‚Р° С„СѓРЅРєС†РёРё
 #define SCM     		SendClientMessage
 #define SPD 			ShowPlayerDialog
 #define Tkick(%0)   	SetTimerEx("@_PlayerKick", 100, false, "i",%0)
@@ -73,18 +73,18 @@
 
 #define MAX_LEADER_NUM 	1
 
-#if !defined isnull//Макросы (1 - для оптимизации strlen();)
+#if !defined isnull//РњР°РєСЂРѕСЃС‹ (1 - РґР»СЏ РѕРїС‚РёРјРёР·Р°С†РёРё strlen();)
 #define isnull(%0)      ((!(%0[0])) || (((%0[0]) == '\1') && (!(%0[1]))))
 #endif
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Переменные ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ РџРµСЂРµРјРµРЅРЅС‹Рµ ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 new
 	connect_mysql,
 	hour_server,
  	minute_server,
   	second_server,
 	
-	number_skin[MAX_PLAYERS char],//Создание массива
+	number_skin[MAX_PLAYERS char],//РЎРѕР·РґР°РЅРёРµ РјР°СЃСЃРёРІР°
 	number_pass[MAX_PLAYERS char],
 	update_timer[MAX_PLAYERS],
 	login_timer[MAX_PLAYERS],
@@ -92,64 +92,64 @@ new
 	report_timer[MAX_PLAYERS],
  	//MAX_LEADER[7] = "1)]",
 	
-	Text: td_select_skin[MAX_PLAYERS][3],//Переменные для текстдравов
+	Text: td_select_skin[MAX_PLAYERS][3],//РџРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ С‚РµРєСЃС‚РґСЂР°РІРѕРІ
 	Text: td_uper_text[MAX_PLAYERS][4],
 	
-	lspd_pick[7],// Пикапы ЛСПД
-	lspd_car[27],// Транспорт ЛСПД
+	lspd_pick[7],// РџРёРєР°РїС‹ Р›РЎРџР”
+	lspd_car[27],// РўСЂР°РЅСЃРїРѕСЂС‚ Р›РЎРџР”
 	
-	Float: pos_pick[3][MAX_PLAYERS],//Переменные типа float
+	Float: pos_pick[3][MAX_PLAYERS],//РџРµСЂРµРјРµРЅРЅС‹Рµ С‚РёРїР° float
 	
-	bool: login_check[MAX_PLAYERS char],//Переменная бул типа, для проверци регистрации
+	bool: login_check[MAX_PLAYERS char],//РџРµСЂРµРјРµРЅРЅР°СЏ Р±СѓР» С‚РёРїР°, РґР»СЏ РїСЂРѕРІРµСЂС†Рё СЂРµРіРёСЃС‚СЂР°С†РёРё
 	bool: report_check[MAX_PLAYERS char],
 	bool: access_check[MAX_PLAYERS char],
 	bool: anti_flood_pick[MAX_PLAYERS char],
 	
-	sex_info[2][7+1] = {"Мужской", "Женский"},//Двумерные массивы
-	nations_info[5][10+1] = {"Русский", "Американец", "Японец", "Китаец", "Итальянец"},
-	leaders_info[1][4+1] = {"LSPD"},// Лидерки
-	Iterator: connect_admins<MAX_PLAYERS>;//Итераторы
-enum pinfo //Название структуры
+	sex_info[2][7+1] = {"РњСѓР¶СЃРєРѕР№", "Р–РµРЅСЃРєРёР№"},//Р”РІСѓРјРµСЂРЅС‹Рµ РјР°СЃСЃРёРІС‹
+	nations_info[5][10+1] = {"Р СѓСЃСЃРєРёР№", "РђРјРµСЂРёРєР°РЅРµС†", "РЇРїРѕРЅРµС†", "РљРёС‚Р°РµС†", "РС‚Р°Р»СЊСЏРЅРµС†"},
+	leaders_info[1][4+1] = {"LSPD"},// Р›РёРґРµСЂРєРё
+	Iterator: connect_admins<MAX_PLAYERS>;//РС‚РµСЂР°С‚РѕСЂС‹
+enum pinfo //РќР°Р·РІР°РЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹
 {
 	ppass[32+1], pmail[70+1], plevel, pmoney, psex, pskin, page, pnations, pid, preferal_check, preferal[MAX_PLAYER_NAME+1], pdate_reg[11+1], pexp, pmaxexp,
-	padmin, pdonate, pakeys, pakey[20+1], pmember, prank, pmodel//Все переменные из БД, +1 для нуля-терменатора
+	padmin, pdonate, pakeys, pakey[20+1], pmember, prank, pmodel//Р’СЃРµ РїРµСЂРµРјРµРЅРЅС‹Рµ РёР· Р‘Р”, +1 РґР»СЏ РЅСѓР»СЏ-С‚РµСЂРјРµРЅР°С‚РѕСЂР°
 }
 new player[MAX_PLAYERS][pinfo];//MAX_PLAYERS
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Паблики ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Паблик диалога
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ РџР°Р±Р»РёРєРё ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//РџР°Р±Р»РёРє РґРёР°Р»РѕРіР°
 {
 	switch(dialogid)
 	{
 	    case 1:
 	    {
-   			if(response)//Если нажата левая клавиша
+   			if(response)//Р•СЃР»Рё РЅР°Р¶Р°С‚Р° Р»РµРІР°СЏ РєР»Р°РІРёС€Р°
    			{
 				new
 				    len = strlen(inputtext);
    			    if(!len)
    			    {
-					SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+					SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
 					DialogRegistration(playerid);
 					return true;
 			   	}
 			   	if(!(6 <= len <= 32))
 			   	{
-			   	    SCM(playerid, ColorGreen, !"Неверная длина пароля");
+			   	    SCM(playerid, ColorGreen, !"РќРµРІРµСЂРЅР°СЏ РґР»РёРЅР° РїР°СЂРѕР»СЏ");
 					DialogRegistration(playerid);
 					return true;
 		   		}
-		   		if(CheckRussianText(inputtext, len+1))// Проверка на русские символы
+		   		if(CheckRussianText(inputtext, len+1))// РџСЂРѕРІРµСЂРєР° РЅР° СЂСѓСЃСЃРєРёРµ СЃРёРјРІРѕР»С‹
 		   		{
-					SCM(playerid, ColorGreen, !"Смените раскладку клавиатуры!");
+					SCM(playerid, ColorGreen, !"РЎРјРµРЅРёС‚Рµ СЂР°СЃРєР»Р°РґРєСѓ РєР»Р°РІРёР°С‚СѓСЂС‹!");
 					DialogRegistration(playerid);
 					return true;
 				}
-				strmid(player[playerid][ppass], inputtext, 0, len, 32+1);//Запись текста/значений в массив - куда записывать, откуда, с какого символа, длина текста, максимальная длина считываемого текста
+				strmid(player[playerid][ppass], inputtext, 0, len, 32+1);//Р—Р°РїРёСЃСЊ С‚РµРєСЃС‚Р°/Р·РЅР°С‡РµРЅРёР№ РІ РјР°СЃСЃРёРІ - РєСѓРґР° Р·Р°РїРёСЃС‹РІР°С‚СЊ, РѕС‚РєСѓРґР°, СЃ РєР°РєРѕРіРѕ СЃРёРјРІРѕР»Р°, РґР»РёРЅР° С‚РµРєСЃС‚Р°, РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° СЃС‡РёС‚С‹РІР°РµРјРѕРіРѕ С‚РµРєСЃС‚Р°
 				DialogEmail(playerid);
       		}
-		   	else //Если нажата правая клавиша
+		   	else //Р•СЃР»Рё РЅР°Р¶Р°С‚Р° РїСЂР°РІР°СЏ РєР»Р°РІРёС€Р°
 		   	{
-				SCM(playerid, ColorRed, !"Введите (/q)uit чтобы выйти");
+				SCM(playerid, ColorRed, !"Р’РІРµРґРёС‚Рµ (/q)uit С‡С‚РѕР±С‹ РІС‹Р№С‚Рё");
 		   	    Tkick(playerid);
 		   	}
 		}
@@ -161,29 +161,29 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
 				    len = strlen(inputtext);
    			    if(!len)
    			    {
-					SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+					SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
 					DialogEmail(playerid);
 					return true;
 			   	}
 			   	if(!(6 <= len <= 70))
 			   	{
-			   	    SCM(playerid, ColorGreen, !"Неверная длина почты");
+			   	    SCM(playerid, ColorGreen, !"РќРµРІРµСЂРЅР°СЏ РґР»РёРЅР° РїРѕС‡С‚С‹");
 					DialogEmail(playerid);
 					return true;
 		   		}
-		   		if(strfind(inputtext, "@", false) == -1 || strfind(inputtext, ".", false) == -1)//Ищет символ в строке - строка, сивол, учитывается ли регистр
+		   		if(strfind(inputtext, "@", false) == -1 || strfind(inputtext, ".", false) == -1)//РС‰РµС‚ СЃРёРјРІРѕР» РІ СЃС‚СЂРѕРєРµ - СЃС‚СЂРѕРєР°, СЃРёРІРѕР», СѓС‡РёС‚С‹РІР°РµС‚СЃСЏ Р»Рё СЂРµРіРёСЃС‚СЂ
 		   		{
-		   		    SCM(playerid, ColorGreen, !"Неверный формат почты!");
+		   		    SCM(playerid, ColorGreen, !"РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ РїРѕС‡С‚С‹!");
 					DialogEmail(playerid);
 					return true;
 		   		}
-		   		if(CheckRussianText(inputtext, len+1))// Проверка на русские символы
+		   		if(CheckRussianText(inputtext, len+1))// РџСЂРѕРІРµСЂРєР° РЅР° СЂСѓСЃСЃРєРёРµ СЃРёРјРІРѕР»С‹
 		   		{
-					SCM(playerid, ColorGreen, !"Смените раскладку клавиатуры!");
+					SCM(playerid, ColorGreen, !"РЎРјРµРЅРёС‚Рµ СЂР°СЃРєР»Р°РґРєСѓ РєР»Р°РІРёР°С‚СѓСЂС‹!");
 					DialogRegistration(playerid);
 					return true;
 				}
-				strmid(player[playerid][pmail], inputtext, 0, len, 70+1);//Запись текста/значений в массив - куда записывать, откуда, с какого символа, длина текста, максимальная длина считываемого текста
+				strmid(player[playerid][pmail], inputtext, 0, len, 70+1);//Р—Р°РїРёСЃСЊ С‚РµРєСЃС‚Р°/Р·РЅР°С‡РµРЅРёР№ РІ РјР°СЃСЃРёРІ - РєСѓРґР° Р·Р°РїРёСЃС‹РІР°С‚СЊ, РѕС‚РєСѓРґР°, СЃ РєР°РєРѕРіРѕ СЃРёРјРІРѕР»Р°, РґР»РёРЅР° С‚РµРєСЃС‚Р°, РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° СЃС‡РёС‚С‹РІР°РµРјРѕРіРѕ С‚РµРєСЃС‚Р°
 				DialogNation(playerid);
 	 			}
 	  	 		else
@@ -211,13 +211,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			        val = strval(inputtext);
   				if(!strlen(inputtext))
    			    {
-					SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+					SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
 					DialogRegistration(playerid);
 					return true;
 			   	}
 			   	if(!(18 <= val <= 70))
 			   	{
-			   	    SCM(playerid, ColorGreen, !"Возраст не может быть меньше 18-ти или больше 70-ти лет!");
+			   	    SCM(playerid, ColorGreen, !"Р’РѕР·СЂР°СЃС‚ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РјРµРЅСЊС€Рµ 18-С‚Рё РёР»Рё Р±РѕР»СЊС€Рµ 70-С‚Рё Р»РµС‚!");
 					DialogAge(playerid);
 					return true;
 		   		}
@@ -235,22 +235,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			{
 	  			if(isnull(inputtext))
    			    {
-					SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+					SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
 					DialogReferal(playerid);
 					return true;
 			   	}
-			   	static //Удаляем const, если используем mysql format
-			    fmt_str[] = "SELECT `Level` FROM `accounts` WHERE `Name` = '%e' LIMIT 1";//Что-либо из БД аккаунты, по имени
+			   	static //РЈРґР°Р»СЏРµРј const, РµСЃР»Рё РёСЃРїРѕР»СЊР·СѓРµРј mysql format
+			    fmt_str[] = "SELECT `Level` FROM `accounts` WHERE `Name` = '%e' LIMIT 1";//Р§С‚Рѕ-Р»РёР±Рѕ РёР· Р‘Р” Р°РєРєР°СѓРЅС‚С‹, РїРѕ РёРјРµРЅРё
 				new
-				    string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//Отнимаем 2 из-за %s, +1 из-за нуля-терминатора
+				    string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//РћС‚РЅРёРјР°РµРј 2 РёР·-Р·Р° %s, +1 РёР·-Р·Р° РЅСѓР»СЏ-С‚РµСЂРјРёРЅР°С‚РѕСЂР°
 
 				mysql_format(connect_mysql, string, sizeof(string), fmt_str, (inputtext));
-				mysql_function_query(connect_mysql, string, true, "@_CheckRef", "de", playerid, inputtext);//@_PlayerCheck - паблик, d - параметры(id игрока)
-				//SCM(playerid, ColorWhite, string);//Отправить сообщение игроку в чате
+				mysql_function_query(connect_mysql, string, true, "@_CheckRef", "de", playerid, inputtext);//@_PlayerCheck - РїР°Р±Р»РёРє, d - РїР°СЂР°РјРµС‚СЂС‹(id РёРіСЂРѕРєР°)
+				//SCM(playerid, ColorWhite, string);//РћС‚РїСЂР°РІРёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ РёРіСЂРѕРєСѓ РІ С‡Р°С‚Рµ
 			}
  			else
 	 		{
-	 		    //strmid(player[playerid][preferal], "None", 0, strlen("None"), 4+1);//Если нажата кнопка "Пропустить", в рефералы записывается сново "None"
+	 		    //strmid(player[playerid][preferal], "None", 0, strlen("None"), 4+1);//Р•СЃР»Рё РЅР°Р¶Р°С‚Р° РєРЅРѕРїРєР° "РџСЂРѕРїСѓСЃС‚РёС‚СЊ", РІ СЂРµС„РµСЂР°Р»С‹ Р·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ СЃРЅРѕРІРѕ "None"
     			DialogSex(playerid);
 	   		}
 		}
@@ -259,13 +259,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
      	    SpawnPlayer(playerid);
    			if(response)
    			{
-	  			player[playerid][psex] = 1;//Мужской
-	  			SetPlayerSkin(playerid, 78);//Установка скина игроку (id игрока, номер скина)
-				number_skin{playerid} = 1;//{} - т.к используем оператор char, оператор char нельзя использловать, если значение переменной больше, чем 255 и в таймерах
+	  			player[playerid][psex] = 1;//РњСѓР¶СЃРєРѕР№
+	  			SetPlayerSkin(playerid, 78);//РЈСЃС‚Р°РЅРѕРІРєР° СЃРєРёРЅР° РёРіСЂРѕРєСѓ (id РёРіСЂРѕРєР°, РЅРѕРјРµСЂ СЃРєРёРЅР°)
+				number_skin{playerid} = 1;//{} - С‚.Рє РёСЃРїРѕР»СЊР·СѓРµРј РѕРїРµСЂР°С‚РѕСЂ char, РѕРїРµСЂР°С‚РѕСЂ char РЅРµР»СЊР·СЏ РёСЃРїРѕР»СЊР·Р»РѕРІР°С‚СЊ, РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ Р±РѕР»СЊС€Рµ, С‡РµРј 255 Рё РІ С‚Р°Р№РјРµСЂР°С…
 		   	}
  			else
 	 		{
-    			player[playerid][psex] = 2;//Женский
+    			player[playerid][psex] = 2;//Р–РµРЅСЃРєРёР№
     			SetPlayerSkin(playerid, 10);
     			number_skin{playerid} = 11;
 	   		}
@@ -274,14 +274,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
 	   		{
 	   		TextDrawShowForPlayer(playerid, td_select_skin[playerid][i]);
 	   		}
-	   		SelectTextDraw(playerid, 0xFF0000FF);//При наведении на текстдрав, текстдрав подсвечивается(меняет цвет на красный)
-	   		SetPlayerVirtualWorld(playerid, playerid);//Создаёт отдельный мир для игрока, необходимо для того, чтобы игрок не соприкосался с другими игроками(id игрока, id виртуального мира)
-			SetPlayerInterior(playerid, 3);//Поместить игрока в интерьер(id игрока, id интерьера)
-			SetPlayerPos(playerid, 513.4482,-13.6003,1001.5653);//Перемещение игрока на позицию интерьера
-			SetPlayerFacingAngle(playerid, 343.2249);//Поворот игрока
-			SetPlayerCameraPos(playerid, 514.7122, -9.7444, 1001.5653);//Установка позиции камеры
-			SetPlayerCameraLookAt(playerid, 513.4482,-13.6003,1001.5653);//На что смотрит камера
-			Freeze(playerid, 0);//Заморозка игрока: 0 - заморозка, 1 - разморозка (TogglePlayerControllable(playerid, 0))
+	   		SelectTextDraw(playerid, 0xFF0000FF);//РџСЂРё РЅР°РІРµРґРµРЅРёРё РЅР° С‚РµРєСЃС‚РґСЂР°РІ, С‚РµРєСЃС‚РґСЂР°РІ РїРѕРґСЃРІРµС‡РёРІР°РµС‚СЃСЏ(РјРµРЅСЏРµС‚ С†РІРµС‚ РЅР° РєСЂР°СЃРЅС‹Р№)
+	   		SetPlayerVirtualWorld(playerid, playerid);//РЎРѕР·РґР°С‘С‚ РѕС‚РґРµР»СЊРЅС‹Р№ РјРёСЂ РґР»СЏ РёРіСЂРѕРєР°, РЅРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РёРіСЂРѕРє РЅРµ СЃРѕРїСЂРёРєРѕСЃР°Р»СЃСЏ СЃ РґСЂСѓРіРёРјРё РёРіСЂРѕРєР°РјРё(id РёРіСЂРѕРєР°, id РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ РјРёСЂР°)
+			SetPlayerInterior(playerid, 3);//РџРѕРјРµСЃС‚РёС‚СЊ РёРіСЂРѕРєР° РІ РёРЅС‚РµСЂСЊРµСЂ(id РёРіСЂРѕРєР°, id РёРЅС‚РµСЂСЊРµСЂР°)
+			SetPlayerPos(playerid, 513.4482,-13.6003,1001.5653);//РџРµСЂРµРјРµС‰РµРЅРёРµ РёРіСЂРѕРєР° РЅР° РїРѕР·РёС†РёСЋ РёРЅС‚РµСЂСЊРµСЂР°
+			SetPlayerFacingAngle(playerid, 343.2249);//РџРѕРІРѕСЂРѕС‚ РёРіСЂРѕРєР°
+			SetPlayerCameraPos(playerid, 514.7122, -9.7444, 1001.5653);//РЈСЃС‚Р°РЅРѕРІРєР° РїРѕР·РёС†РёРё РєР°РјРµСЂС‹
+			SetPlayerCameraLookAt(playerid, 513.4482,-13.6003,1001.5653);//РќР° С‡С‚Рѕ СЃРјРѕС‚СЂРёС‚ РєР°РјРµСЂР°
+			Freeze(playerid, 0);//Р—Р°РјРѕСЂРѕР·РєР° РёРіСЂРѕРєР°: 0 - Р·Р°РјРѕСЂРѕР·РєР°, 1 - СЂР°Р·РјРѕСЂРѕР·РєР° (TogglePlayerControllable(playerid, 0))
 		}
 		case 7:
      	{
@@ -289,12 +289,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			{
    			    if(isnull(inputtext))
    			    {
-					SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+					SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
 					DialogLogin(playerid);
 					return true;
 			   	}
-			   	static //Удаляем const, если используем mysql format
-    				fmt_str[] = "SELECT * FROM `accounts` WHERE `Name` = '%s' AND `Pass` = '%s' LIMIT 1";//Что-либо из БД аккаунты, по имени
+			   	static //РЈРґР°Р»СЏРµРј const, РµСЃР»Рё РёСЃРїРѕР»СЊР·СѓРµРј mysql format
+    				fmt_str[] = "SELECT * FROM `accounts` WHERE `Name` = '%s' AND `Pass` = '%s' LIMIT 1";//Р§С‚Рѕ-Р»РёР±Рѕ РёР· Р‘Р” Р°РєРєР°СѓРЅС‚С‹, РїРѕ РёРјРµРЅРё
 				new
 	    			string[sizeof(fmt_str)+MAX_PLAYER_NAME+29];
 
@@ -304,7 +304,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
 			}
  			else
 	 		{
-    			SCM(playerid, ColorRed, !"Введите (/q)uit чтобы выйти");
+    			SCM(playerid, ColorRed, !"Р’РІРµРґРёС‚Рµ (/q)uit С‡С‚РѕР±С‹ РІС‹Р№С‚Рё");
 		   	    Tkick(playerid);
 	   		}
 		}
@@ -367,24 +367,24 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			{
    			    switch(listitem)
    			    {
-   			        case 0: ComBase(playerid);// Основные
-   			        /*case 1: ComWork(playerid);// Работа
-   			        case 2: ComChat(playerid);// Чат
-   			        case 3: ComPhone(playerid);// Телефон
-   			        case 4: ComHome(playerid);// Дом/Отель
-   			        case 5: ComBiz(playerid);// Бизнес
-   			        case 6: ComVeh(playerid);// Транспорт
-   			        case 7: ComFood(playerid);// Рыбалка/Еда
-   			        case 8: ComWed(playerid);// Свадьбы
+   			        case 0: ComBase(playerid);// РћСЃРЅРѕРІРЅС‹Рµ
+   			        /*case 1: ComWork(playerid);// Р Р°Р±РѕС‚Р°
+   			        case 2: ComChat(playerid);// Р§Р°С‚
+   			        case 3: ComPhone(playerid);// РўРµР»РµС„РѕРЅ
+   			        case 4: ComHome(playerid);// Р”РѕРј/РћС‚РµР»СЊ
+   			        case 5: ComBiz(playerid);// Р‘РёР·РЅРµСЃ
+   			        case 6: ComVeh(playerid);// РўСЂР°РЅСЃРїРѕСЂС‚
+   			        case 7: ComFood(playerid);// Р С‹Р±Р°Р»РєР°/Р•РґР°
+   			        case 8: ComWed(playerid);// РЎРІР°РґСЊР±С‹
    			        case 9: ComIRC(playerid);// IRC
-   			        case 10: ComLeder(playerid);// Лидерство
-   			        case 11: ComAnim(playerid);// Анимации
-   			        case 12: ComRull(playerid);// Законники
-   			        case 13: ComLoy(playerid);// Адвокаты
-   			        case 14: ComMCHS(playerid);// МЧС
-   			        case 15: ComTaxi(playerid);// Такси
-   			        case 16: ComHitman(playerid);// Наёмные убийцы
-   			        case 17: ComRep(playerid);// Репортёры*/
+   			        case 10: ComLeder(playerid);// Р›РёРґРµСЂСЃС‚РІРѕ
+   			        case 11: ComAnim(playerid);// РђРЅРёРјР°С†РёРё
+   			        case 12: ComRull(playerid);// Р—Р°РєРѕРЅРЅРёРєРё
+   			        case 13: ComLoy(playerid);// РђРґРІРѕРєР°С‚С‹
+   			        case 14: ComMCHS(playerid);// РњР§РЎ
+   			        case 15: ComTaxi(playerid);// РўР°РєСЃРё
+   			        case 16: ComHitman(playerid);// РќР°С‘РјРЅС‹Рµ СѓР±РёР№С†С‹
+   			        case 17: ComRep(playerid);// Р РµРїРѕСЂС‚С‘СЂС‹*/
 			   	}
 			}
  			else
@@ -413,7 +413,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
 		}
 		case 15://ShowStat
      	{
-   			if(!response)//!Т.к проверка только на правую клавишу(Меняем клавиши местами)
+   			if(!response)//!Рў.Рє РїСЂРѕРІРµСЂРєР° С‚РѕР»СЊРєРѕ РЅР° РїСЂР°РІСѓСЋ РєР»Р°РІРёС€Сѓ(РњРµРЅСЏРµРј РєР»Р°РІРёС€Рё РјРµСЃС‚Р°РјРё)
    			{
    				ShowPers(playerid);
 			}
@@ -455,20 +455,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			    if(isnull(inputtext))
    			    {
    			        DialogReport(playerid);
-   			        SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+   			        SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
    			        return true;
 			   	}
 				if(report_check{playerid} == true)
 				{
 
    			        DialogReport(playerid);
-   			        SCM(playerid, ColorGreen, !"Пожалуйста подождите перед отправкой следующего сообщения администрации!");
+   			        SCM(playerid, ColorGreen, !"РџРѕР¶Р°Р»СѓР№СЃС‚Р° РїРѕРґРѕР¶РґРёС‚Рµ РїРµСЂРµРґ РѕС‚РїСЂР°РІРєРѕР№ СЃР»РµРґСѓСЋС‰РµРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ Р°РґРјРёРЅРёСЃС‚СЂР°С†РёРё!");
    			        return true;
 				}
 
 			    static const
-				    fmt_str[] = "Ваша жалоба: %s",
-				    fmt_str_2[] = "%s[%d] отправил жалобу: %s";
+				    fmt_str[] = "Р’Р°С€Р° Р¶Р°Р»РѕР±Р°: %s",
+				    fmt_str_2[] = "%s[%d] РѕС‚РїСЂР°РІРёР» Р¶Р°Р»РѕР±Сѓ: %s";
 				new
 				    string[sizeof(fmt_str) + 86],
 				    string_2[sizeof(fmt_str_2) + MAX_PLAYER_NAME + 86];
@@ -509,26 +509,26 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			    if(isnull(inputtext))
    			    {
    			        DialogDonateConv(playerid);
-   			        SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+   			        SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
    			        return true;
 			   	}
    			    if(player[playerid][pdonate] < val)
    			    {
    			        DialogDonateConv(playerid);
-   			        SCM(playerid, ColorGreen, !"У вас недостаточно донат-рублей!");
+   			        SCM(playerid, ColorGreen, !"РЈ РІР°СЃ РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґРѕРЅР°С‚-СЂСѓР±Р»РµР№!");
    			        return true;
 			   	}
 			   	if(!(0 < val <= 99999999999))
 			   	{
-			   	    SCM(playerid, ColorGreen, !"Неверное значение введённого числа!");
+			   	    SCM(playerid, ColorGreen, !"РќРµРІРµСЂРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІРІРµРґС‘РЅРЅРѕРіРѕ С‡РёСЃР»Р°!");
 					DialogDonateConv(playerid);
 					return true;
 		   		}
 		   		static const
-			    	fmt_str[] = "Вы перевели {FFFF00}%d {FFFFFF}донат-рублей в {FFFF00}%d{FFFFFF} игровых долларов";
+			    	fmt_str[] = "Р’С‹ РїРµСЂРµРІРµР»Рё {FFFF00}%d {FFFFFF}РґРѕРЅР°С‚-СЂСѓР±Р»РµР№ РІ {FFFF00}%d{FFFFFF} РёРіСЂРѕРІС‹С… РґРѕР»Р»Р°СЂРѕРІ";
 				new
 			    	string[sizeof(fmt_str)+18],
-			    	money = val*1_000;//Курс
+			    	money = val*1_000;//РљСѓСЂСЃ
 
 				format(string, sizeof(string), fmt_str, val, money);
 		   		player[playerid][pmoney] += money;
@@ -549,31 +549,31 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
 		    if(isnull(inputtext))
 		    {
       			DialogDonateConv(playerid);
-       			SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+       			SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
 		        return true;
 		   	}
 			new
 				len = strlen(inputtext);
    			if(!(6 <= len <= 20))
 			   	{
-			   	    SCM(playerid, ColorGreen, !"Неверная длина пароля");
+			   	    SCM(playerid, ColorGreen, !"РќРµРІРµСЂРЅР°СЏ РґР»РёРЅР° РїР°СЂРѕР»СЏ");
 					DialogAdminRegistration(playerid);
 					return true;
 		   		}
         	if(CheckRussianText(inputtext, len+1))
 		   		{
-					SCM(playerid, ColorGreen, !"Смените раскладку клавиатуры!");
+					SCM(playerid, ColorGreen, !"РЎРјРµРЅРёС‚Рµ СЂР°СЃРєР»Р°РґРєСѓ РєР»Р°РІРёР°С‚СѓСЂС‹!");
 					DialogAdminRegistration(playerid);
 					return true;
 				}
             static const
-	    		fmt_str[] = "Ваш админ-пароль:	%s";
+	    		fmt_str[] = "Р’Р°С€ Р°РґРјРёРЅ-РїР°СЂРѕР»СЊ:	%s";
 			new
 	    		string[sizeof(fmt_str)+38];
 
 			format(string, sizeof(string), fmt_str, inputtext);
 			SCM(playerid, ColorGreen, string);
-			SCM(playerid, ColorGreen, !"Рекомендуем сделать скриншот (F8), чтобы не забыть админ-пароль!");
+			SCM(playerid, ColorGreen, !"Р РµРєРѕРјРµРЅРґСѓРµРј СЃРґРµР»Р°С‚СЊ СЃРєСЂРёРЅС€РѕС‚ (F8), С‡С‚РѕР±С‹ РЅРµ Р·Р°Р±С‹С‚СЊ Р°РґРјРёРЅ-РїР°СЂРѕР»СЊ!");
 			player[playerid][pakeys] = 1;
 			strmid(player[playerid][pakey], inputtext, 0, len, 20+1);
 			SavePlayer(playerid, "Akeys", player[playerid][pakeys], "d");
@@ -592,24 +592,24 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			if(isnull(inputtext))
 		    {
       			DialogAdminLogin(playerid);
-       			SCM(playerid, ColorGreen, !"Вы ничего не ввели");
+       			SCM(playerid, ColorGreen, !"Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІРІРµР»Рё");
 		        return true;
 		   	}
 			if(strcmp(player[playerid][pakey], inputtext, false) != 0 || len <=0)
 			{
 			    DialogAdminLogin(playerid);
-   			    SCM(playerid, ColorRed, !"Неверный админ-пароль!");
+   			    SCM(playerid, ColorRed, !"РќРµРІРµСЂРЅС‹Р№ Р°РґРјРёРЅ-РїР°СЂРѕР»СЊ!");
 			    return true;
 			}
 		 	static const
-	    		fmt_str[] = "Администратор: {FFFFFF}%s[%d], %d уровня {DF8600}авторизовался!";
+	    		fmt_str[] = "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ: {FFFFFF}%s[%d], %d СѓСЂРѕРІРЅСЏ {DF8600}Р°РІС‚РѕСЂРёР·РѕРІР°Р»СЃСЏ!";
 		 	new
 	    		string[sizeof(fmt_str)+MAX_PLAYER_NAME];
 
 			format(string, sizeof(string), fmt_str, GN(playerid), playerid, player[playerid][padmin]);
 			AdmChat(ColorOrange, string);
 			access_check{playerid} = true;
-			SCM(playerid, ColorGreen, !"Админ-авторизация прошла успешно! Добро пожаловать!");
+			SCM(playerid, ColorGreen, !"РђРґРјРёРЅ-Р°РІС‚РѕСЂРёР·Р°С†РёСЏ РїСЂРѕС€Р»Р° СѓСЃРїРµС€РЅРѕ! Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ!");
 			}
 			else
   			{
@@ -623,56 +623,56 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
    			    {
    			        case 0:
    			        {
-   			            SCM(playerid, ColorRed, !"Выберите уровень администрирования!");
+   			            SCM(playerid, ColorRed, !"Р’С‹Р±РµСЂРёС‚Рµ СѓСЂРѕРІРµРЅСЊ Р°РґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёСЏ!");
 			   		}
 			   		case 1:
    			        {
-						SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 1-го уровня", !"\
-						\n{00BFFF}/kick {FFFFFF} - Кикнуть игрока\
-						\n{00BFFF}/spawn {FFFFFF} - Спавн\
-						", !"Принять", !"Назад");
+						SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 1-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{00BFFF}/kick {FFFFFF} - РљРёРєРЅСѓС‚СЊ РёРіСЂРѕРєР°\
+						\n{00BFFF}/spawn {FFFFFF} - РЎРїР°РІРЅ\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
 			   		case 2:
    			        {
-                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 2-го уровня", !"\
-						\n{FF0000}В разработке\
-						", !"Принять", !"Назад");
+                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 2-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{FF0000}Р’ СЂР°Р·СЂР°Р±РѕС‚РєРµ\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
 			   		case 3:
    			        {
-                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 3-го уровня", !"\
-						\n{00BFFF}/veh {FFFFFF} - Создать транспорт\
-						", !"Принять", !"Назад");
+                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 3-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{00BFFF}/veh {FFFFFF} - РЎРѕР·РґР°С‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
 			   		case 4:
    			        {
-                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 4-го уровня", !"\
-						\n{FF0000}В разработке\
-						", !"Принять", !"Назад");
+                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 4-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{FF0000}Р’ СЂР°Р·СЂР°Р±РѕС‚РєРµ\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
 			   		case 5:
    			        {
-                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 5-го уровня", !"\
-						\n{FF0000}В разработке\
-						", !"Принять", !"Назад");
+                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 5-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{FF0000}Р’ СЂР°Р·СЂР°Р±РѕС‚РєРµ\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
 			   		case 6:
    			        {
-                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 6-го уровня", !"\
-						\n{FF0000}/makeleader - Назначить/уволить лидера\
-						", !"Принять", !"Назад");
+                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 6-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{FF0000}/makeleader - РќР°Р·РЅР°С‡РёС‚СЊ/СѓРІРѕР»РёС‚СЊ Р»РёРґРµСЂР°\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
 			   		case 7:
    			        {
-                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 7-го уровня", !"\
-						\n{FF0000}В разработке\
-						", !"Принять", !"Назад");
+                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 7-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{FF0000}Р’ СЂР°Р·СЂР°Р±РѕС‚РєРµ\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
 			   		case 8:
    			        {
-                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"Команды 8-го уровня", !"\
-						\n{FF0000}В разработке\
-						", !"Принять", !"Назад");
+                        SPD(playerid, 25, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹ 8-РіРѕ СѓСЂРѕРІРЅСЏ", !"\
+						\n{FF0000}Р’ СЂР°Р·СЂР°Р±РѕС‚РєРµ\
+						", !"РџСЂРёРЅСЏС‚СЊ", !"РќР°Р·Р°Рґ");
 			   		}
    			    }
 			}
@@ -692,7 +692,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
 				{
 				    case 0:
 				    {
-				        GivePlayerWeapon(playerid, 24, 35);//Выдача игроку оружия
+				        GivePlayerWeapon(playerid, 24, 35);//Р’С‹РґР°С‡Р° РёРіСЂРѕРєСѓ РѕСЂСѓР¶РёСЏ
 				    }
 				    case 1:
 				    {
@@ -711,25 +711,25 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])//Па
 				        SetPlayerArmour(playerid, 100.0);
 				    }
 				}
-				DialogGunLSPD(playerid);//Обновление диалога после выбора
+				DialogGunLSPD(playerid);//РћР±РЅРѕРІР»РµРЅРёРµ РґРёР°Р»РѕРіР° РїРѕСЃР»Рµ РІС‹Р±РѕСЂР°
 			}
 		}
 	}
 	return true;
 }
-public OnGameModeInit()//При запуске сервера
+public OnGameModeInit()//РџСЂРё Р·Р°РїСѓСЃРєРµ СЃРµСЂРІРµСЂР°
 {
 	SetGameModeText("MerovRP");
-	AddPlayerClass(0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0); //Спавн игрока по параметрам: id скина, 3 коорд. , угол поворота, 6 ненужных значений
-    ShowPlayerMarkers(PLAYER_MARKERS_MODE_STREAMED);//Показывает маркеры игрока 0- нет, 1- по всей карте, 2 - ограниченно
-    ShowNameTags(true); //Показывает Теги у игроков
-    SetNameTagDrawDistance(20.0); //На какой дистанции видны имена игроков
-    DisableInteriorEnterExits();//Убирает вход в стандартные дома из сингла
-    EnableStuntBonusForAll(0);//Убирает бонус за трюки
-    connect_mysql = mysql_connect(MySQL_HOST, MySQL_USER, MySQL_DB, MySQL_PASS);//Подключение к БД: хост, имя пользователя, База данных, пароль
-    mysql_function_query(connect_mysql, "SET NAMES utf8", false, "", "");//Подключение к базе, тип сравнения, кэширование, паблик, кол-во аргуметов паблика
-    mysql_function_query(connect_mysql, "SET CHARACTER SET 'cp1251'", false, "", "");/*Подключение к базе, выставление кодировки для приёма русских символов в бд,
-	кэширование, паблик, кол-во аргуметов паблика*/
+	AddPlayerClass(0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0); //РЎРїР°РІРЅ РёРіСЂРѕРєР° РїРѕ РїР°СЂР°РјРµС‚СЂР°Рј: id СЃРєРёРЅР°, 3 РєРѕРѕСЂРґ. , СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р°, 6 РЅРµРЅСѓР¶РЅС‹С… Р·РЅР°С‡РµРЅРёР№
+    ShowPlayerMarkers(PLAYER_MARKERS_MODE_STREAMED);//РџРѕРєР°Р·С‹РІР°РµС‚ РјР°СЂРєРµСЂС‹ РёРіСЂРѕРєР° 0- РЅРµС‚, 1- РїРѕ РІСЃРµР№ РєР°СЂС‚Рµ, 2 - РѕРіСЂР°РЅРёС‡РµРЅРЅРѕ
+    ShowNameTags(true); //РџРѕРєР°Р·С‹РІР°РµС‚ РўРµРіРё Сѓ РёРіСЂРѕРєРѕРІ
+    SetNameTagDrawDistance(20.0); //РќР° РєР°РєРѕР№ РґРёСЃС‚Р°РЅС†РёРё РІРёРґРЅС‹ РёРјРµРЅР° РёРіСЂРѕРєРѕРІ
+    DisableInteriorEnterExits();//РЈР±РёСЂР°РµС‚ РІС…РѕРґ РІ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РґРѕРјР° РёР· СЃРёРЅРіР»Р°
+    EnableStuntBonusForAll(0);//РЈР±РёСЂР°РµС‚ Р±РѕРЅСѓСЃ Р·Р° С‚СЂСЋРєРё
+    connect_mysql = mysql_connect(MySQL_HOST, MySQL_USER, MySQL_DB, MySQL_PASS);//РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р‘Р”: С…РѕСЃС‚, РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, Р‘Р°Р·Р° РґР°РЅРЅС‹С…, РїР°СЂРѕР»СЊ
+    mysql_function_query(connect_mysql, "SET NAMES utf8", false, "", "");//РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р±Р°Р·Рµ, С‚РёРї СЃСЂР°РІРЅРµРЅРёСЏ, РєСЌС€РёСЂРѕРІР°РЅРёРµ, РїР°Р±Р»РёРє, РєРѕР»-РІРѕ Р°СЂРіСѓРјРµС‚РѕРІ РїР°Р±Р»РёРєР°
+    mysql_function_query(connect_mysql, "SET CHARACTER SET 'cp1251'", false, "", "");/*РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р±Р°Р·Рµ, РІС‹СЃС‚Р°РІР»РµРЅРёРµ РєРѕРґРёСЂРѕРІРєРё РґР»СЏ РїСЂРёС‘РјР° СЂСѓСЃСЃРєРёС… СЃРёРјРІРѕР»РѕРІ РІ Р±Рґ,
+	РєСЌС€РёСЂРѕРІР°РЅРёРµ, РїР°Р±Р»РёРє, РєРѕР»-РІРѕ Р°СЂРіСѓРјРµС‚РѕРІ РїР°Р±Р»РёРєР°*/
 	gettime(hour_server, minute_server, second_server);
 	SetTimer("@_Update_Server", 1_000, false);
 	SetWorldTime(hour_server);
@@ -748,15 +748,15 @@ public OnPlayerRequestClass(playerid, classid)
 public OnPlayerConnect(playerid)
 {
 
-	GetPlayerName(playerid, player_name[playerid], MAX_PLAYER_NAME);//id игрока, массив,куда записываем, кол-во
-	static //Удаляем const, если используем mysql format
-	    fmt_str[] = "SELECT * FROM `accounts` WHERE `Name` = '%s' LIMIT 1";//Что-либо из БД аккаунты, по имени
+	GetPlayerName(playerid, player_name[playerid], MAX_PLAYER_NAME);//id РёРіСЂРѕРєР°, РјР°СЃСЃРёРІ,РєСѓРґР° Р·Р°РїРёСЃС‹РІР°РµРј, РєРѕР»-РІРѕ
+	static //РЈРґР°Р»СЏРµРј const, РµСЃР»Рё РёСЃРїРѕР»СЊР·СѓРµРј mysql format
+	    fmt_str[] = "SELECT * FROM `accounts` WHERE `Name` = '%s' LIMIT 1";//Р§С‚Рѕ-Р»РёР±Рѕ РёР· Р‘Р” Р°РєРєР°СѓРЅС‚С‹, РїРѕ РёРјРµРЅРё
 	new
-	    string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//Отнимаем 2 из-за %s, +1 из-за нуля-терминатора
+	    string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//РћС‚РЅРёРјР°РµРј 2 РёР·-Р·Р° %s, +1 РёР·-Р·Р° РЅСѓР»СЏ-С‚РµСЂРјРёРЅР°С‚РѕСЂР°
 	
 	mysql_format(connect_mysql, string, sizeof(string), fmt_str, GN(playerid));
-	mysql_function_query(connect_mysql, string, true, "@_PlayerCheck", "d", playerid);//@_PlayerCheck - паблик, d - параметры(id игрока)
-	//SCM(playerid, ColorWhite, string);//Отправить сообщение игроку в чате
+	mysql_function_query(connect_mysql, string, true, "@_PlayerCheck", "d", playerid);//@_PlayerCheck - РїР°Р±Р»РёРє, d - РїР°СЂР°РјРµС‚СЂС‹(id РёРіСЂРѕРєР°)
+	//SCM(playerid, ColorWhite, string);//РћС‚РїСЂР°РІРёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ РёРіСЂРѕРєСѓ РІ С‡Р°С‚Рµ
 	Clear(playerid);
 	PlayerTextDraws(playerid);
 	for(new i; i!=4; i++)
@@ -805,11 +805,11 @@ public OnPlayerText(playerid, text[])
 {
 	if(login_check{playerid} == false)
 	{
-	    SCM(playerid, ColorGreen, "Вы не авторизованы!");
+	    SCM(playerid, ColorGreen, "Р’С‹ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС‹!");
 	    return false;
 	}
 	
-	switch(player[playerid][pmember])//Клист в чате, в зависимости от фракции
+	switch(player[playerid][pmember])//РљР»РёСЃС‚ РІ С‡Р°С‚Рµ, РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С„СЂР°РєС†РёРё
 	{
 		case 0:
 	    {
@@ -832,8 +832,8 @@ public OnPlayerText(playerid, text[])
 	}
 	if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 	{
-	    ApplyAnimation(playerid, "PED", "IDLE_chat", 4.1, 0, 1, 1, 1, 1);// Применить анимацию (id игрока, библиотека, конкретная анимация из библиотеки, время воспроизведения, координаты, таймер)
-	    SetTimerEx("@_ClearAnim", 3_000, false, "i", playerid);//Таймер для очистки анимации
+	    ApplyAnimation(playerid, "PED", "IDLE_chat", 4.1, 0, 1, 1, 1, 1);// РџСЂРёРјРµРЅРёС‚СЊ Р°РЅРёРјР°С†РёСЋ (id РёРіСЂРѕРєР°, Р±РёР±Р»РёРѕС‚РµРєР°, РєРѕРЅРєСЂРµС‚РЅР°СЏ Р°РЅРёРјР°С†РёСЏ РёР· Р±РёР±Р»РёРѕС‚РµРєРё, РІСЂРµРјСЏ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ, РєРѕРѕСЂРґРёРЅР°С‚С‹, С‚Р°Р№РјРµСЂ)
+	    SetTimerEx("@_ClearAnim", 3_000, false, "i", playerid);//РўР°Р№РјРµСЂ РґР»СЏ РѕС‡РёСЃС‚РєРё Р°РЅРёРјР°С†РёРё
 	}
 	return false;
 }
@@ -849,9 +849,9 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 {
 	return true;
 }
-public OnPlayerStateChange(playerid, newstate, oldstate)//Меняет расположение игрока
+public OnPlayerStateChange(playerid, newstate, oldstate)//РњРµРЅСЏРµС‚ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ РёРіСЂРѕРєР°
 {
-	//Система ключей
+	//РЎРёСЃС‚РµРјР° РєР»СЋС‡РµР№
 	new
 	    carid = GetPlayerVehicleID(playerid);
 	if(newstate == PLAYER_STATE_DRIVER)
@@ -864,7 +864,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)//Меняет расположение иг
 			else
 			{
 			    RemovePlayerFromVehicle(playerid);
-			    SCM(playerid, ColorGreen, "Вы не можете управлять транспортом ЛСПД!");
+			    SCM(playerid, ColorGreen, "Р’С‹ РЅРµ РјРѕР¶РµС‚Рµ СѓРїСЂР°РІР»СЏС‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚РѕРј Р›РЎРџР”!");
 			}
 		}
 	}
@@ -902,7 +902,7 @@ public OnPlayerObjectMoved(playerid, objectid)
 {
 	return true;
 }
-public OnPlayerPickUpDynamicPickup(playerid, pickupid)//Пикапы
+public OnPlayerPickUpDynamicPickup(playerid, pickupid)//РџРёРєР°РїС‹
 {
 	if(anti_flood_pick{playerid} == true)
 		return true;
@@ -913,11 +913,11 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)//Пикапы
 	}
 	if(pickupid == lspd_pick[0])
 	{
-	    SetPlayerPos(playerid, 246.5715, 65.2846, 1003.6406);//Кооры спавна
-		SetPlayerFacingAngle(playerid, 2.3383);//Угол поворота
-		SetPlayerVirtualWorld(playerid, 1);//Помещение игрока в мир с id = 0
-		SetPlayerInterior(playerid, 6);//Установка интерьера
-		SetCameraBehindPlayer(playerid);//Установка камеры позади игрока
+	    SetPlayerPos(playerid, 246.5715, 65.2846, 1003.6406);//РљРѕРѕСЂС‹ СЃРїР°РІРЅР°
+		SetPlayerFacingAngle(playerid, 2.3383);//РЈРіРѕР» РїРѕРІРѕСЂРѕС‚Р°
+		SetPlayerVirtualWorld(playerid, 1);//РџРѕРјРµС‰РµРЅРёРµ РёРіСЂРѕРєР° РІ РјРёСЂ СЃ id = 0
+		SetPlayerInterior(playerid, 6);//РЈСЃС‚Р°РЅРѕРІРєР° РёРЅС‚РµСЂСЊРµСЂР°
+		SetCameraBehindPlayer(playerid);//РЈСЃС‚Р°РЅРѕРІРєР° РєР°РјРµСЂС‹ РїРѕР·Р°РґРё РёРіСЂРѕРєР°
 	}
 	if(pickupid == lspd_pick[1])
 	{
@@ -962,7 +962,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)//Пикапы
 	if(pickupid == lspd_pick[6])
 	{
 		if(player[playerid][pmember] != 1)
-			return SCM(playerid, ColorGrey, !"В не состоите в LSPD!");
+			return SCM(playerid, ColorGrey, !"Р’ РЅРµ СЃРѕСЃС‚РѕРёС‚Рµ РІ LSPD!");
 
 		DialogGunLSPD(playerid);
 	}
@@ -1028,7 +1028,7 @@ public OnPlayerCommandReceived(playerid, cmd[], params[], flags)
 {
     if(login_check{playerid} == false)
 	{
-	    SCM(playerid, ColorGreen, "Вы не авторизованы!");
+	    SCM(playerid, ColorGreen, "Р’С‹ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС‹!");
 	    return false;
 	}
 	return true;
@@ -1036,11 +1036,11 @@ public OnPlayerCommandReceived(playerid, cmd[], params[], flags)
 public OnPlayerClickTextDraw(playerid, Text: clickedid)
 {
 	if(clickedid == Text:INVALID_TEXT_DRAW && number_skin{playerid} > 0)
-	    SelectTextDraw(playerid, 0xFF0000FF);// Для возвращения кликабельности после нажатия кнопки Esc
+	    SelectTextDraw(playerid, 0xFF0000FF);// Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РєР»РёРєР°Р±РµР»СЊРЅРѕСЃС‚Рё РїРѕСЃР»Рµ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё Esc
 	if(clickedid == td_select_skin[playerid][0])
 	{
 	    number_skin{playerid} ++;
-	    if(player[playerid][psex] == 1)//Вращение скинов по кругу
+	    if(player[playerid][psex] == 1)//Р’СЂР°С‰РµРЅРёРµ СЃРєРёРЅРѕРІ РїРѕ РєСЂСѓРіСѓ
 		{
 	        if(number_skin{playerid} == 11)
 	            number_skin{playerid} = 1;
@@ -1053,7 +1053,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 
 	    switch(number_skin{playerid})
 	    {
-	        // Мужские скины
+	        // РњСѓР¶СЃРєРёРµ СЃРєРёРЅС‹
 	        case 1: SetPlayerSkin(playerid, 78);
 	        case 2: SetPlayerSkin(playerid, 79);
 	        case 3: SetPlayerSkin(playerid, 134);
@@ -1064,7 +1064,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	        case 8: SetPlayerSkin(playerid, 200);
 	        case 9: SetPlayerSkin(playerid, 212);
 	        case 10: SetPlayerSkin(playerid, 230);
-	        // Женские скины
+	        // Р–РµРЅСЃРєРёРµ СЃРєРёРЅС‹
 	        case 11: SetPlayerSkin(playerid, 10);
 	        case 12: SetPlayerSkin(playerid, 39);
 	        case 13: SetPlayerSkin(playerid, 54);
@@ -1083,7 +1083,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	if(clickedid == td_select_skin[playerid][1])
 	{
 	    number_skin{playerid} --;
-	    if(player[playerid][psex] == 1)//Вращение скинов по кругу
+	    if(player[playerid][psex] == 1)//Р’СЂР°С‰РµРЅРёРµ СЃРєРёРЅРѕРІ РїРѕ РєСЂСѓРіСѓ
 	    {
 	        if(number_skin{playerid} == 0)
 	            number_skin{playerid} = 10;
@@ -1096,7 +1096,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 
 	    switch(number_skin{playerid})
 	    {
-	        // Мужские скины
+	        // РњСѓР¶СЃРєРёРµ СЃРєРёРЅС‹
 	        case 1: SetPlayerSkin(playerid, 78);
 	        case 2: SetPlayerSkin(playerid, 79);
 	        case 3: SetPlayerSkin(playerid, 134);
@@ -1107,7 +1107,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	        case 8: SetPlayerSkin(playerid, 200);
 	        case 9: SetPlayerSkin(playerid, 212);
 	        case 10: SetPlayerSkin(playerid, 230);
-	        // Женские скины
+	        // Р–РµРЅСЃРєРёРµ СЃРєРёРЅС‹
 	        case 11: SetPlayerSkin(playerid, 10);
 	        case 12: SetPlayerSkin(playerid, 39);
 	        case 13: SetPlayerSkin(playerid, 54);
@@ -1129,21 +1129,21 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 		    year_server,
 		    mounth_server,
 		    day_server;
-	    for(new i; i != 3; i++) TextDrawHideForPlayer(playerid, td_select_skin[playerid][i]);//Скрытие текстдравов
-	    SCM(playerid, ColorWhite, !"Создание аккаунта прошло успешно!");
+	    for(new i; i != 3; i++) TextDrawHideForPlayer(playerid, td_select_skin[playerid][i]);//РЎРєСЂС‹С‚РёРµ С‚РµРєСЃС‚РґСЂР°РІРѕРІ
+	    SCM(playerid, ColorWhite, !"РЎРѕР·РґР°РЅРёРµ Р°РєРєР°СѓРЅС‚Р° РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ!");
 	    login_check{playerid} = true;
-	    update_timer[playerid] = SetTimerEx("@_UpdateTime", 1_000, false, "i", playerid);//Для перезапуска таймера, после входа игрока, и выключение при выходу
+	    update_timer[playerid] = SetTimerEx("@_UpdateTime", 1_000, false, "i", playerid);//Р”Р»СЏ РїРµСЂРµР·Р°РїСѓСЃРєР° С‚Р°Р№РјРµСЂР°, РїРѕСЃР»Рµ РІС…РѕРґР° РёРіСЂРѕРєР°, Рё РІС‹РєР»СЋС‡РµРЅРёРµ РїСЂРё РІС‹С…РѕРґСѓ
 	    Freeze(playerid, 1);
-	    number_skin{playerid} = 0;//Выходим из режима выбора скина
-	    CancelSelectTextDraw(playerid);//Выходим из режима кликабельности текстдровов
-		//Создание аккаунта
-	    player[playerid][plevel] = 0;//Начальный уровень
-	    player[playerid][pmoney] = 300;//Начальные деньги
+	    number_skin{playerid} = 0;//Р’С‹С…РѕРґРёРј РёР· СЂРµР¶РёРјР° РІС‹Р±РѕСЂР° СЃРєРёРЅР°
+	    CancelSelectTextDraw(playerid);//Р’С‹С…РѕРґРёРј РёР· СЂРµР¶РёРјР° РєР»РёРєР°Р±РµР»СЊРЅРѕСЃС‚Рё С‚РµРєСЃС‚РґСЂРѕРІРѕРІ
+		//РЎРѕР·РґР°РЅРёРµ Р°РєРєР°СѓРЅС‚Р°
+	    player[playerid][plevel] = 0;//РќР°С‡Р°Р»СЊРЅС‹Р№ СѓСЂРѕРІРµРЅСЊ
+	    player[playerid][pmoney] = 300;//РќР°С‡Р°Р»СЊРЅС‹Рµ РґРµРЅСЊРіРё
 	    player[playerid][pmaxexp] = 4;
 	    player[playerid][pdonate] = 0;
 	    player[playerid][pskin] = GetPlayerSkin(playerid);
 		//
-		getdate(year_server, mounth_server, day_server);//Получение даты с компьютера (год, месяц, день)
+		getdate(year_server, mounth_server, day_server);//РџРѕР»СѓС‡РµРЅРёРµ РґР°С‚С‹ СЃ РєРѕРјРїСЊСЋС‚РµСЂР° (РіРѕРґ, РјРµСЃСЏС†, РґРµРЅСЊ)
 		format(player[playerid][pdate_reg], 10+1, "%02d/%02d/%02d", day_server, mounth_server, year_server);
 		//
 		static
@@ -1151,9 +1151,9 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 			"\
 				INSERT INTO `accounts` (`Name`, `Pass`, `Mail`, `Sex`, `Skin`, `Age`, `Nations`, `Level`, `Referal`, `Referal Check`, `Money`, `Exp`, `Maxexp`, `Date Reg`) VALUES ('%s', '%s', \
 				'%s', '%d', '%d', '%d', '%d', '%d', '%s', '%d', '%d', '%d', '%d', '%s')\
-			";// VALUES - Связывает строки со значениями
+			";// VALUES - РЎРІСЏР·С‹РІР°РµС‚ СЃС‚СЂРѕРєРё СЃРѕ Р·РЅР°С‡РµРЅРёСЏРјРё
 		new
-		    string[sizeof(fmt_str)+MAX_PLAYER_NAME*2+94];//Переподсчёт значений
+		    string[sizeof(fmt_str)+MAX_PLAYER_NAME*2+94];//РџРµСЂРµРїРѕРґСЃС‡С‘С‚ Р·РЅР°С‡РµРЅРёР№
 
 		mysql_format(connect_mysql, string, sizeof(string), fmt_str,
 		GN(playerid), player[playerid][ppass], player[playerid][pmail], player[playerid][psex], player[playerid][pskin], player[playerid][page],
@@ -1166,27 +1166,27 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 
  	return true;
 }
-@_PlayerCheck(playerid);//Объявление нового паблика, @_ - вместо forward
-@_PlayerCheck(playerid)//Класс приёма данных(Регистрация, авторизация)
+@_PlayerCheck(playerid);//РћР±СЉСЏРІР»РµРЅРёРµ РЅРѕРІРѕРіРѕ РїР°Р±Р»РёРєР°, @_ - РІРјРµСЃС‚Рѕ forward
+@_PlayerCheck(playerid)//РљР»Р°СЃСЃ РїСЂРёС‘РјР° РґР°РЅРЅС‹С…(Р РµРіРёСЃС‚СЂР°С†РёСЏ, Р°РІС‚РѕСЂРёР·Р°С†РёСЏ)
 {
 	new
 		rows,
 		fields;
 		
 	cache_get_data(rows, fields);
-	if(rows) //Авторизация
+	if(rows) //РђРІС‚РѕСЂРёР·Р°С†РёСЏ
 	{
 	        login_timer[playerid] = SetTimerEx("@_CheckLogin", 1_000 * 60, false, "i",playerid);
 			DialogLogin(playerid);
  	}
-	else //Регистрация
+	else //Р РµРіРёСЃС‚СЂР°С†РёСЏ
 	{
 			static const
 	   			reset_data[pinfo];
 	        player[playerid] = reset_data;
 			DialogRegistration(playerid);
 	}
-	SCM(playerid, ColorRed, !"{FF0000}Добро пожаловать на сервер {FFFF00}Merov Role Play"); //{Код цвета}, !Упоковывание текста(сокращение кол-ва выделенной памяти)
+	SCM(playerid, ColorRed, !"{FF0000}Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РЅР° СЃРµСЂРІРµСЂ {FFFF00}Merov Role Play"); //{РљРѕРґ С†РІРµС‚Р°}, !РЈРїРѕРєРѕРІС‹РІР°РЅРёРµ С‚РµРєСЃС‚Р°(СЃРѕРєСЂР°С‰РµРЅРёРµ РєРѕР»-РІР° РІС‹РґРµР»РµРЅРЅРѕР№ РїР°РјСЏС‚Рё)
 	return true;
 }
 @_UpdateTime(playerid);
@@ -1201,8 +1201,8 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	if(!IsPlayerInRangeOfPoint(playerid, 3.0, pos_pick[0][playerid], pos_pick[1][playerid], pos_pick[2][playerid]))
 		anti_flood_pick{playerid} = false;
 
-	update_timer[playerid] = SetTimerEx("@_UpdateTime", 1_000, false, "i",playerid);//Таймер, который будет функционировать только у определённого игрока, i - идентификатор id, playerid - id игрока
-	//SetTimer("@_UpdateTime", false, 1_000);//Стандартный таймер - Пабик, True/false - сам циклирует или же нет,если false - то скарботает один раз, через какое время
+	update_timer[playerid] = SetTimerEx("@_UpdateTime", 1_000, false, "i",playerid);//РўР°Р№РјРµСЂ, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ С„СѓРЅРєС†РёРѕРЅРёСЂРѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ Сѓ РѕРїСЂРµРґРµР»С‘РЅРЅРѕРіРѕ РёРіСЂРѕРєР°, i - РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ id, playerid - id РёРіСЂРѕРєР°
+	//SetTimer("@_UpdateTime", false, 1_000);//РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ С‚Р°Р№РјРµСЂ - РџР°Р±РёРє, True/false - СЃР°Рј С†РёРєР»РёСЂСѓРµС‚ РёР»Рё Р¶Рµ РЅРµС‚,РµСЃР»Рё false - С‚Рѕ СЃРєР°СЂР±РѕС‚Р°РµС‚ РѕРґРёРЅ СЂР°Р·, С‡РµСЂРµР· РєР°РєРѕРµ РІСЂРµРјСЏ
 	return true;
 }
 @_PlayerKick(playerid);
@@ -1211,7 +1211,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	Kick(playerid);
 	return true;
 }
-@_CheckRef(playerid, name[]);//Объявление нового паблика, @_ - вместо forward
+@_CheckRef(playerid, name[]);//РћР±СЉСЏРІР»РµРЅРёРµ РЅРѕРІРѕРіРѕ РїР°Р±Р»РёРєР°, @_ - РІРјРµСЃС‚Рѕ forward
 @_CheckRef(playerid, name[])
 {
 	new
@@ -1219,9 +1219,9 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 		fields;
 
 	cache_get_data(rows, fields);
-	if(!rows)//Если аккаунт не был найден
+	if(!rows)//Р•СЃР»Рё Р°РєРєР°СѓРЅС‚ РЅРµ Р±С‹Р» РЅР°Р№РґРµРЅ
 	{
-	    SCM(playerid, ColorGreen, !"Аккаунт не найден");
+	    SCM(playerid, ColorGreen, !"РђРєРєР°СѓРЅС‚ РЅРµ РЅР°Р№РґРµРЅ");
 		DialogReferal(playerid);
 		return true;
 	}
@@ -1234,7 +1234,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 @_GetID(playerid)
 {
 
-	player[playerid][pid] = cache_insert_id();// Напрямую получаем id из авто инкримент
+	player[playerid][pid] = cache_insert_id();// РќР°РїСЂСЏРјСѓСЋ РїРѕР»СѓС‡Р°РµРј id РёР· Р°РІС‚Рѕ РёРЅРєСЂРёРјРµРЅС‚
 	return true;
 }
 @_OnLogin(playerid);
@@ -1247,14 +1247,14 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	cache_get_data(rows, fields);
 	if(rows)
   	{
-  	    //Загрузка текстовых данных из БД
-		cache_get_field_content(0, "Pass", player[playerid][ppass], connect_mysql, 32+1);// Загружаем данные из Pass в ppass
+  	    //Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚РѕРІС‹С… РґР°РЅРЅС‹С… РёР· Р‘Р”
+		cache_get_field_content(0, "Pass", player[playerid][ppass], connect_mysql, 32+1);// Р—Р°РіСЂСѓР¶Р°РµРј РґР°РЅРЅС‹Рµ РёР· Pass РІ ppass
 		cache_get_field_content(0, "Mail", player[playerid][pmail], connect_mysql, 60+1);
 		cache_get_field_content(0, "Referal", player[playerid][preferal], connect_mysql, MAX_PLAYER_NAME+1);
 		cache_get_field_content(0, "Date Reg", player[playerid][pdate_reg], connect_mysql, 11+1);
 		cache_get_field_content(0, "Akey", player[playerid][pakey], connect_mysql, 20+1);
-		//Загрузка целочисленных данных из БД
-		player[playerid][pid] = cache_get_field_content_int(0, "ID");//(Идентификатор, строка загрузки)
+		//Р—Р°РіСЂСѓР·РєР° С†РµР»РѕС‡РёСЃР»РµРЅРЅС‹С… РґР°РЅРЅС‹С… РёР· Р‘Р”
+		player[playerid][pid] = cache_get_field_content_int(0, "ID");//(РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ, СЃС‚СЂРѕРєР° Р·Р°РіСЂСѓР·РєРё)
 		player[playerid][plevel] = cache_get_field_content_int(0, "Level");
 		player[playerid][pmoney] = cache_get_field_content_int(0, "Money");
 		player[playerid][pskin] = cache_get_field_content_int(0, "Skin");
@@ -1277,8 +1277,8 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
  	    SetTimerEx("@_FastSpawn", 100, false, "i", playerid);
  	    update_timer[playerid] = SetTimerEx("@_UpdateTime", 1_000, false, "i", playerid);
  	    KillTimer(login_timer[playerid]);
-  		static //Удаляем const, если используем mysql format
-			fmt_str[] = "SELECT * FROM `referal` WHERE `Name` = '%s'";//Что-либо из БД аккаунты, по имени
+  		static //РЈРґР°Р»СЏРµРј const, РµСЃР»Рё РёСЃРїРѕР»СЊР·СѓРµРј mysql format
+			fmt_str[] = "SELECT * FROM `referal` WHERE `Name` = '%s'";//Р§С‚Рѕ-Р»РёР±Рѕ РёР· Р‘Р” Р°РєРєР°СѓРЅС‚С‹, РїРѕ РёРјРµРЅРё
 		new
 			string[sizeof(fmt_str)+MAX_PLAYER_NAME-1];
 
@@ -1290,13 +1290,13 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	 	number_pass{playerid} ++;
 	    if(number_pass{playerid} == 3)
 	    {
-	        SCM(playerid, ColorGreen, !"Попытки на ввод закончились. Введите (/q)uit чтобы выйти");
+	        SCM(playerid, ColorGreen, !"РџРѕРїС‹С‚РєРё РЅР° РІРІРѕРґ Р·Р°РєРѕРЅС‡РёР»РёСЃСЊ. Р’РІРµРґРёС‚Рµ (/q)uit С‡С‚РѕР±С‹ РІС‹Р№С‚Рё");
 	        Tkick(playerid);
 	        return true;
 	    }
 
 	    static const
-		    fmt_str[] = "Вы ввели неверный пароль, осталось попыток: %d";
+		    fmt_str[] = "Р’С‹ РІРІРµР»Рё РЅРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ, РѕСЃС‚Р°Р»РѕСЃСЊ РїРѕРїС‹С‚РѕРє: %d";
 		new
 		    string[sizeof(fmt_str)];
 
@@ -1315,7 +1315,7 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 @_CheckLogin(playerid);
 @_CheckLogin(playerid)
 {
-	SCM(playerid, ColorGreen, !"Время на авторизацию вышло. Введите (/q)uit чтобы выйти");
+	SCM(playerid, ColorGreen, !"Р’СЂРµРјСЏ РЅР° Р°РІС‚РѕСЂРёР·Р°С†РёСЋ РІС‹С€Р»Рѕ. Р’РІРµРґРёС‚Рµ (/q)uit С‡С‚РѕР±С‹ РІС‹Р№С‚Рё");
 	Tkick(playerid);
 	return true;
 }
@@ -1348,9 +1348,9 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 	{
 	    player[playerid][pmoney] += 50_000;
 	    SavePlayer(playerid, "Money", player[playerid][pmoney], "d");
-	    SCM(playerid, ColorGreen, !"Ваш реферал достиг 3-го уровня!");
-	    static //Удаляем const, если используем mysql format
-			fmt_str[] = "DELETE FROM `referal` WHERE `Name` = '%s' LIMIT 1";//Удаление из БД
+	    SCM(playerid, ColorGreen, !"Р’Р°С€ СЂРµС„РµСЂР°Р» РґРѕСЃС‚РёРі 3-РіРѕ СѓСЂРѕРІРЅСЏ!");
+	    static //РЈРґР°Р»СЏРµРј const, РµСЃР»Рё РёСЃРїРѕР»СЊР·СѓРµРј mysql format
+			fmt_str[] = "DELETE FROM `referal` WHERE `Name` = '%s' LIMIT 1";//РЈРґР°Р»РµРЅРёРµ РёР· Р‘Р”
 		new
 			string[sizeof(fmt_str)+MAX_PLAYER_NAME-1];
 
@@ -1376,45 +1376,45 @@ public OnPlayerClickTextDraw(playerid, Text: clickedid)
 {
 	return true;
 }
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Стоки ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ РЎС‚РѕРєРё ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 stock DialogRegistration(playerid)
 {
-		static const//Тк используем форматирование
-	    	fmt_str[] = "{FFFFFF}Здравствуй {008000}%s, {FFFFFF}приветствую на сервере {FFFF00}MerovRP\n\
-						\n{FFFFFF}Не забудь посетить нашу группу во вконтакте {FF0000}www.vk.com\n\
-		 				\n{FFFFFF}Придумай и введи свой пароль:";
+		static const//РўРє РёСЃРїРѕР»СЊР·СѓРµРј С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ
+	    	fmt_str[] = "{FFFFFF}Р—РґСЂР°РІСЃС‚РІСѓР№ {008000}%s, {FFFFFF}РїСЂРёРІРµС‚СЃС‚РІСѓСЋ РЅР° СЃРµСЂРІРµСЂРµ {FFFF00}MerovRP\n\
+						\n{FFFFFF}РќРµ Р·Р°Р±СѓРґСЊ РїРѕСЃРµС‚РёС‚СЊ РЅР°С€Сѓ РіСЂСѓРїРїСѓ РІРѕ РІРєРѕРЅС‚Р°РєС‚Рµ {FF0000}www.vk.com\n\
+		 				\n{FFFFFF}РџСЂРёРґСѓРјР°Р№ Рё РІРІРµРґРё СЃРІРѕР№ РїР°СЂРѕР»СЊ:";
 		new
-	    	string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//Отнимаем 2 из-за %s, +1 из-за нуля-терминатора
+	    	string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//РћС‚РЅРёРјР°РµРј 2 РёР·-Р·Р° %s, +1 РёР·-Р·Р° РЅСѓР»СЏ-С‚РµСЂРјРёРЅР°С‚РѕСЂР°
 
 		format(string, sizeof(string), fmt_str, GN(playerid));
-		SPD(playerid, 1, DIALOG_STYLE_INPUT, !"Регистрация",string,!"Далее",!"Выход");
-		// ShowPlayerDialog(id игрока,id диалога, тип диалога, название диалога, сам текст диалога, левая клавиша, правая клавиша), если только одна кнопка,то вторую не писать
-		//DIALOG_STYLE_PASSWORD - Засекреченный диалог
-		//DIALOG_STYLE_MSGBOX - Информационный диалог
-		//DIALOG_STYLE_INPUT - Стандартный диалог
-		//DIALOG_STYLE_LIST - Список/Выбор
-		//DIALOG_STYLE_TABLIST_HEADERS - Создание таблиц
-		//\-перенос кавычки
+		SPD(playerid, 1, DIALOG_STYLE_INPUT, !"Р РµРіРёСЃС‚СЂР°С†РёСЏ",string,!"Р”Р°Р»РµРµ",!"Р’С‹С…РѕРґ");
+		// ShowPlayerDialog(id РёРіСЂРѕРєР°,id РґРёР°Р»РѕРіР°, С‚РёРї РґРёР°Р»РѕРіР°, РЅР°Р·РІР°РЅРёРµ РґРёР°Р»РѕРіР°, СЃР°Рј С‚РµРєСЃС‚ РґРёР°Р»РѕРіР°, Р»РµРІР°СЏ РєР»Р°РІРёС€Р°, РїСЂР°РІР°СЏ РєР»Р°РІРёС€Р°), РµСЃР»Рё С‚РѕР»СЊРєРѕ РѕРґРЅР° РєРЅРѕРїРєР°,С‚Рѕ РІС‚РѕСЂСѓСЋ РЅРµ РїРёСЃР°С‚СЊ
+		//DIALOG_STYLE_PASSWORD - Р—Р°СЃРµРєСЂРµС‡РµРЅРЅС‹Р№ РґРёР°Р»РѕРі
+		//DIALOG_STYLE_MSGBOX - РРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ РґРёР°Р»РѕРі
+		//DIALOG_STYLE_INPUT - РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РґРёР°Р»РѕРі
+		//DIALOG_STYLE_LIST - РЎРїРёСЃРѕРє/Р’С‹Р±РѕСЂ
+		//DIALOG_STYLE_TABLIST_HEADERS - РЎРѕР·РґР°РЅРёРµ С‚Р°Р±Р»РёС†
+		//\-РїРµСЂРµРЅРѕСЃ РєР°РІС‹С‡РєРё
 }
 stock DialogEmail(playerid)
 {
-SPD(playerid, 2, DIALOG_STYLE_INPUT,  !"Почта", !"{FFFFFF}Введите вашу почту: ", !"Далее", !"Назад");
+SPD(playerid, 2, DIALOG_STYLE_INPUT,  !"РџРѕС‡С‚Р°", !"{FFFFFF}Р’РІРµРґРёС‚Рµ РІР°С€Сѓ РїРѕС‡С‚Сѓ: ", !"Р”Р°Р»РµРµ", !"РќР°Р·Р°Рґ");
 }
 stock DialogNation(playerid)
 {
-SPD(playerid, 3, DIALOG_STYLE_LIST, !"Национальность", !"Русский\nАмериканец\nЯпонец\nКитаец\nИтальянец", !"Выбрать", !"Назад");
+SPD(playerid, 3, DIALOG_STYLE_LIST, !"РќР°С†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ", !"Р СѓСЃСЃРєРёР№\nРђРјРµСЂРёРєР°РЅРµС†\nРЇРїРѕРЅРµС†\nРљРёС‚Р°РµС†\nРС‚Р°Р»СЊСЏРЅРµС†", !"Р’С‹Р±СЂР°С‚СЊ", !"РќР°Р·Р°Рґ");
 }
 stock DialogAge(playerid)
 {
-	SPD(playerid, 4, DIALOG_STYLE_INPUT,  !"Возраст", !"{FFFFFF}Введите ваш возраст (от 18 до 70 лет): ", !"Далее", !"Назад");
+	SPD(playerid, 4, DIALOG_STYLE_INPUT,  !"Р’РѕР·СЂР°СЃС‚", !"{FFFFFF}Р’РІРµРґРёС‚Рµ РІР°С€ РІРѕР·СЂР°СЃС‚ (РѕС‚ 18 РґРѕ 70 Р»РµС‚): ", !"Р”Р°Р»РµРµ", !"РќР°Р·Р°Рґ");
 }
 stock DialogReferal(playerid)
 {
-    SPD(playerid, 5, DIALOG_STYLE_INPUT,  !"Реферальная система", !"{FFFFFF}Укажите никнейм игрока, пригласившего вас: \nПри достижении 3-го уровня, вы получите 50.000$", !"Далее", !"Пропустить");
+    SPD(playerid, 5, DIALOG_STYLE_INPUT,  !"Р РµС„РµСЂР°Р»СЊРЅР°СЏ СЃРёСЃС‚РµРјР°", !"{FFFFFF}РЈРєР°Р¶РёС‚Рµ РЅРёРєРЅРµР№Рј РёРіСЂРѕРєР°, РїСЂРёРіР»Р°СЃРёРІС€РµРіРѕ РІР°СЃ: \nРџСЂРё РґРѕСЃС‚РёР¶РµРЅРёРё 3-РіРѕ СѓСЂРѕРІРЅСЏ, РІС‹ РїРѕР»СѓС‡РёС‚Рµ 50.000$", !"Р”Р°Р»РµРµ", !"РџСЂРѕРїСѓСЃС‚РёС‚СЊ");
 }
 stock DialogSex(playerid)
 {
-    SPD(playerid, 6, DIALOG_STYLE_MSGBOX,  !"Выберите пол", !"{FFFFFF}Выберите пол: ", !"Мужчина", !"Женщина");
+    SPD(playerid, 6, DIALOG_STYLE_MSGBOX,  !"Р’С‹Р±РµСЂРёС‚Рµ РїРѕР»", !"{FFFFFF}Р’С‹Р±РµСЂРёС‚Рµ РїРѕР»: ", !"РњСѓР¶С‡РёРЅР°", !"Р–РµРЅС‰РёРЅР°");
 }
 stock Clear(playerid)
 {
@@ -1425,32 +1425,32 @@ stock Clear(playerid)
 	report_check{playerid} = false;
 	access_check{playerid} = false;
 }
-stock SetPlayerSpawn(playerid)//Функция спавне игрока
+stock SetPlayerSpawn(playerid)//Р¤СѓРЅРєС†РёСЏ СЃРїР°РІРЅРµ РёРіСЂРѕРєР°
 {
-	Clist(playerid);//Установка цвета игрока при спавне со 100% прозрачностью (00)
-	SetPlayerScore(playerid, player[playerid][plevel]);//Задание очков(уровня игрока)
-	if(player[playerid][pmember] > 0)//Проверка на скин фрацкии, выдача скина в зависимости от наличия фракции
+	Clist(playerid);//РЈСЃС‚Р°РЅРѕРІРєР° С†РІРµС‚Р° РёРіСЂРѕРєР° РїСЂРё СЃРїР°РІРЅРµ СЃРѕ 100% РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊСЋ (00)
+	SetPlayerScore(playerid, player[playerid][plevel]);//Р—Р°РґР°РЅРёРµ РѕС‡РєРѕРІ(СѓСЂРѕРІРЅСЏ РёРіСЂРѕРєР°)
+	if(player[playerid][pmember] > 0)//РџСЂРѕРІРµСЂРєР° РЅР° СЃРєРёРЅ С„СЂР°С†РєРёРё, РІС‹РґР°С‡Р° СЃРєРёРЅР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РЅР°Р»РёС‡РёСЏ С„СЂР°РєС†РёРё
 	{
 	    SetPlayerSkin(playerid, player[playerid][pmodel]);
 		switch(player[playerid][pmember])
 		{
 		    case 1:
 		    {
-     			SetPlayerPos(playerid, 254.1158, 77.7199, 1003.6406);//Кооры спавна LSPD
-     			SetPlayerFacingAngle(playerid, 180.0);//Угол поворота
-				SetPlayerInterior(playerid, 6);//Установка интерьера
+     			SetPlayerPos(playerid, 254.1158, 77.7199, 1003.6406);//РљРѕРѕСЂС‹ СЃРїР°РІРЅР° LSPD
+     			SetPlayerFacingAngle(playerid, 180.0);//РЈРіРѕР» РїРѕРІРѕСЂРѕС‚Р°
+				SetPlayerInterior(playerid, 6);//РЈСЃС‚Р°РЅРѕРІРєР° РёРЅС‚РµСЂСЊРµСЂР°
 			}
 		}
-		SetPlayerVirtualWorld(playerid, player[playerid][pmember]);//Помещение игрока в мир с id = 0
-	    SetCameraBehindPlayer(playerid);//Установка камеры позади игрока
+		SetPlayerVirtualWorld(playerid, player[playerid][pmember]);//РџРѕРјРµС‰РµРЅРёРµ РёРіСЂРѕРєР° РІ РјРёСЂ СЃ id = 0
+	    SetCameraBehindPlayer(playerid);//РЈСЃС‚Р°РЅРѕРІРєР° РєР°РјРµСЂС‹ РїРѕР·Р°РґРё РёРіСЂРѕРєР°
 	    return true;
 	}
 	SetPlayerSkin(playerid, player[playerid][pskin]);
-	SetPlayerPos(playerid, 2840.1497, 1303.2096, 11.3906);//Кооры спавна
-	SetPlayerFacingAngle(playerid, 88.1048);//Угол поворота
-	SetPlayerVirtualWorld(playerid, 0);//Помещение игрока в мир с id = 0
-	SetPlayerInterior(playerid, 0);//Установка интерьера
-	SetCameraBehindPlayer(playerid);//Установка камеры позади игрока
+	SetPlayerPos(playerid, 2840.1497, 1303.2096, 11.3906);//РљРѕРѕСЂС‹ СЃРїР°РІРЅР°
+	SetPlayerFacingAngle(playerid, 88.1048);//РЈРіРѕР» РїРѕРІРѕСЂРѕС‚Р°
+	SetPlayerVirtualWorld(playerid, 0);//РџРѕРјРµС‰РµРЅРёРµ РёРіСЂРѕРєР° РІ РјРёСЂ СЃ id = 0
+	SetPlayerInterior(playerid, 0);//РЈСЃС‚Р°РЅРѕРІРєР° РёРЅС‚РµСЂСЊРµСЂР°
+	SetCameraBehindPlayer(playerid);//РЈСЃС‚Р°РЅРѕРІРєР° РєР°РјРµСЂС‹ РїРѕР·Р°РґРё РёРіСЂРѕРєР°
 	return true;
 }
 stock KillTimers(playerid)
@@ -1459,13 +1459,13 @@ stock KillTimers(playerid)
     KillTimer(login_timer[playerid]);
     KillTimer(report_timer[playerid]);
 }
-stock PlayerTextDraws(playerid)//Текстдровы
+stock PlayerTextDraws(playerid)//РўРµРєСЃС‚РґСЂРѕРІС‹
 {
-//Выбор скина
+//Р’С‹Р±РѕСЂ СЃРєРёРЅР°
 td_select_skin[playerid][0] = TextDrawCreate(475.200042, 309.120056, "LD_BEAT:right");
 TextDrawLetterSize(td_select_skin[playerid][0], 0.000000, 0.000000);
 TextDrawTextSize(td_select_skin[playerid][0], 85.599975, 39.813354);
-TextDrawAlignment(td_select_skin[playerid][0], 2);//Заменяем второй параметр на 2, для выравнивания по центру
+TextDrawAlignment(td_select_skin[playerid][0], 2);//Р—Р°РјРµРЅСЏРµРј РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РЅР° 2, РґР»СЏ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ РїРѕ С†РµРЅС‚СЂСѓ
 TextDrawColor(td_select_skin[playerid][0], -1061109505);
 TextDrawSetShadow(td_select_skin[playerid][0], 0);
 TextDrawSetOutline(td_select_skin[playerid][0], 0);
@@ -1475,7 +1475,7 @@ TextDrawSetSelectable(td_select_skin[playerid][0], true);
 td_select_skin[playerid][1] = TextDrawCreate(89.800018, 307.133209, "LD_BEAT:left");
 TextDrawLetterSize(td_select_skin[playerid][1], 0.000000, 0.000000);
 TextDrawTextSize(td_select_skin[playerid][1], 85.599975, 39.813354);
-TextDrawAlignment(td_select_skin[playerid][1], 2);//Заменяем второй параметр на 2, для выравнивания по центру
+TextDrawAlignment(td_select_skin[playerid][1], 2);//Р—Р°РјРµРЅСЏРµРј РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РЅР° 2, РґР»СЏ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ РїРѕ С†РµРЅС‚СЂСѓ
 TextDrawColor(td_select_skin[playerid][1], -1061109505);
 TextDrawSetShadow(td_select_skin[playerid][1], 0);
 TextDrawSetOutline(td_select_skin[playerid][1], 0);
@@ -1485,13 +1485,13 @@ TextDrawSetSelectable(td_select_skin[playerid][1], true);
 td_select_skin[playerid][2] = TextDrawCreate(320.200256, 321.813415, "SELECT");
 TextDrawLetterSize(td_select_skin[playerid][2], 0.449999, 1.600000);
 TextDrawTextSize(td_select_skin[playerid][2], 20, 70);
-TextDrawAlignment(td_select_skin[playerid][2], 2);//Заменяем второй параметр на 2, для выравнивания по центру
+TextDrawAlignment(td_select_skin[playerid][2], 2);//Р—Р°РјРµРЅСЏРµРј РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РЅР° 2, РґР»СЏ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ РїРѕ С†РµРЅС‚СЂСѓ
 TextDrawColor(td_select_skin[playerid][2], -1061109505);
 TextDrawSetShadow(td_select_skin[playerid][2], 0);
 TextDrawSetOutline(td_select_skin[playerid][2], 1);
 TextDrawBackgroundColor(td_select_skin[playerid][2], 255);
 TextDrawFont(td_select_skin[playerid][2], 2);
-TextDrawSetProportional(td_select_skin[playerid][2], 2);//Между буквами
+TextDrawSetProportional(td_select_skin[playerid][2], 2);//РњРµР¶РґСѓ Р±СѓРєРІР°РјРё
 TextDrawSetSelectable(td_select_skin[playerid][2], true);
 
 td_uper_text[playerid][0] = TextDrawCreate(639.199951, 288.213348, "New Textdraw");
@@ -1536,142 +1536,142 @@ TextDrawSetProportional(td_uper_text[playerid][3], 1);
 }
 stock DialogLogin(playerid)
 {
-		static const//Тк используем форматирование
-	    	fmt_str[] = "{FFFFFF}Здравствуй {008000}%s, {FFFFFF}приветствую на сервере {FFFF00}MerovRP\n\
-						\n{FFFFFF}Ваш аккаунт уже зарегистрирован!\n\
-		 				\n{FFFFFF}Пожалуйста, укажите свой пароль:";
+		static const//РўРє РёСЃРїРѕР»СЊР·СѓРµРј С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ
+	    	fmt_str[] = "{FFFFFF}Р—РґСЂР°РІСЃС‚РІСѓР№ {008000}%s, {FFFFFF}РїСЂРёРІРµС‚СЃС‚РІСѓСЋ РЅР° СЃРµСЂРІРµСЂРµ {FFFF00}MerovRP\n\
+						\n{FFFFFF}Р’Р°С€ Р°РєРєР°СѓРЅС‚ СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ!\n\
+		 				\n{FFFFFF}РџРѕР¶Р°Р»СѓР№СЃС‚Р°, СѓРєР°Р¶РёС‚Рµ СЃРІРѕР№ РїР°СЂРѕР»СЊ:";
 		new
-	    	string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//Отнимаем 2 из-за %s, +1 из-за нуля-терминатора
+	    	string[sizeof(fmt_str)-2+MAX_PLAYER_NAME+1];//РћС‚РЅРёРјР°РµРј 2 РёР·-Р·Р° %s, +1 РёР·-Р·Р° РЅСѓР»СЏ-С‚РµСЂРјРёРЅР°С‚РѕСЂР°
 
 		format(string, sizeof(string), fmt_str, GN(playerid));
-		SPD(playerid, 7, DIALOG_STYLE_PASSWORD, !"Авторизация",string,!"Далее",!"Выход");
+		SPD(playerid, 7, DIALOG_STYLE_PASSWORD, !"РђРІС‚РѕСЂРёР·Р°С†РёСЏ",string,!"Р”Р°Р»РµРµ",!"Р’С‹С…РѕРґ");
 }
 stock CheckRussianText(string[], size = sizeof(string))
 {
     for(new i; i < size; i++)
 				switch(string[i])
 				{
-				    case 'А'..'Я', 'а'..'я':
+				    case 'Рђ'..'РЇ', 'Р°'..'СЏ':
 					return true;
 				}
 	return false;
 }
 stock ShowPers(playerid)
 {
-	SPD(playerid, 9, DIALOG_STYLE_LIST, !"Персонаж","\
-	{F5DEB3}Статистика\
-	\n{F5DEB3}Навыки\
-	\n{F5DEB3}Лицензии",!"Далее",!"Назад");
+	SPD(playerid, 9, DIALOG_STYLE_LIST, !"РџРµСЂСЃРѕРЅР°Р¶","\
+	{F5DEB3}РЎС‚Р°С‚РёСЃС‚РёРєР°\
+	\n{F5DEB3}РќР°РІС‹РєРё\
+	\n{F5DEB3}Р›РёС†РµРЅР·РёРё",!"Р”Р°Р»РµРµ",!"РќР°Р·Р°Рґ");
 	return true;
 }
 stock ShowGPS(playerid)
 {
-    SPD(playerid, 10, DIALOG_STYLE_LIST, !"Навигация",!"\
-	{F5DEB3}Трудоустройство\
-	\n{F5DEB3}Доп. Заработок\
-	\n{F5DEB3}Фракции\
-	\n{F5DEB3}Магазины одежды\
-	\n{F5DEB3}Аренда транспорта\
-	\n{F5DEB3}Прочие важные места\
-	\n{F5DEB3}Поиск дома по 'ID'\
-	\n{F5DEB3}Свободные дома\
-	\n{F5DEB3}Тюнинг авто\
-	\n{F5DEB3}Ближайший отель\
-	\n{F5DEB3}Ближайший тир\
-	\n{F5DEB3}Аренда рекламных щитов\
-	\n{F5DEB3}Ёлка\
-	\n{FF80AB}Убрать отметку (/gps off)",!"Далее",!"Назад");
+    SPD(playerid, 10, DIALOG_STYLE_LIST, !"РќР°РІРёРіР°С†РёСЏ",!"\
+	{F5DEB3}РўСЂСѓРґРѕСѓСЃС‚СЂРѕР№СЃС‚РІРѕ\
+	\n{F5DEB3}Р”РѕРї. Р—Р°СЂР°Р±РѕС‚РѕРє\
+	\n{F5DEB3}Р¤СЂР°РєС†РёРё\
+	\n{F5DEB3}РњР°РіР°Р·РёРЅС‹ РѕРґРµР¶РґС‹\
+	\n{F5DEB3}РђСЂРµРЅРґР° С‚СЂР°РЅСЃРїРѕСЂС‚Р°\
+	\n{F5DEB3}РџСЂРѕС‡РёРµ РІР°Р¶РЅС‹Рµ РјРµСЃС‚Р°\
+	\n{F5DEB3}РџРѕРёСЃРє РґРѕРјР° РїРѕ 'ID'\
+	\n{F5DEB3}РЎРІРѕР±РѕРґРЅС‹Рµ РґРѕРјР°\
+	\n{F5DEB3}РўСЋРЅРёРЅРі Р°РІС‚Рѕ\
+	\n{F5DEB3}Р‘Р»РёР¶Р°Р№С€РёР№ РѕС‚РµР»СЊ\
+	\n{F5DEB3}Р‘Р»РёР¶Р°Р№С€РёР№ С‚РёСЂ\
+	\n{F5DEB3}РђСЂРµРЅРґР° СЂРµРєР»Р°РјРЅС‹С… С‰РёС‚РѕРІ\
+	\n{F5DEB3}РЃР»РєР°\
+	\n{FF80AB}РЈР±СЂР°С‚СЊ РѕС‚РјРµС‚РєСѓ (/gps off)",!"Р”Р°Р»РµРµ",!"РќР°Р·Р°Рґ");
 	return true;
 }
 stock ShowOnline(playerid)
 {
-    SPD(playerid, 11, DIALOG_STYLE_LIST, !"Игроки онлайн",!"\
-	{F5DEB3}Хелперы Оналйн\
-	\n{F5DEB3}Лидеры Онлайн\
-	\n{F5DEB3}Адвокаты Онлайн\
-	\n{F5DEB3}Детективы Онлайн\
-	\n{F5DEB3}Участники Онлайн\
-	\n{F5DEB3}Модераторы Онлайн\
-	\n{F5DEB3}Репортёры Онлайн",!"Далее",!"Назад");
+    SPD(playerid, 11, DIALOG_STYLE_LIST, !"РРіСЂРѕРєРё РѕРЅР»Р°Р№РЅ",!"\
+	{F5DEB3}РҐРµР»РїРµСЂС‹ РћРЅР°Р»Р№РЅ\
+	\n{F5DEB3}Р›РёРґРµСЂС‹ РћРЅР»Р°Р№РЅ\
+	\n{F5DEB3}РђРґРІРѕРєР°С‚С‹ РћРЅР»Р°Р№РЅ\
+	\n{F5DEB3}Р”РµС‚РµРєС‚РёРІС‹ РћРЅР»Р°Р№РЅ\
+	\n{F5DEB3}РЈС‡Р°СЃС‚РЅРёРєРё РћРЅР»Р°Р№РЅ\
+	\n{F5DEB3}РњРѕРґРµСЂР°С‚РѕСЂС‹ РћРЅР»Р°Р№РЅ\
+	\n{F5DEB3}Р РµРїРѕСЂС‚С‘СЂС‹ РћРЅР»Р°Р№РЅ",!"Р”Р°Р»РµРµ",!"РќР°Р·Р°Рґ");
 	return true;
 }
 stock ShowComm(playerid)
 {
-    SPD(playerid, 12, DIALOG_STYLE_LIST, !"Команды сервера",!"\
-	{F5DEB3}Основные\
-	\n{F5DEB3}Работа\
-	\n{F5DEB3}Чат\
-	\n{F5DEB3}Телефон\
-	\n{F5DEB3}Дом/Отель\
-	\n{F5DEB3}Бизнес\
-	\n{F5DEB3}Транспорт\
-	\n{F5DEB3}Рыбалка/Еда\
-	\n{F5DEB3}Свадьбы\
+    SPD(playerid, 12, DIALOG_STYLE_LIST, !"РљРѕРјР°РЅРґС‹ СЃРµСЂРІРµСЂР°",!"\
+	{F5DEB3}РћСЃРЅРѕРІРЅС‹Рµ\
+	\n{F5DEB3}Р Р°Р±РѕС‚Р°\
+	\n{F5DEB3}Р§Р°С‚\
+	\n{F5DEB3}РўРµР»РµС„РѕРЅ\
+	\n{F5DEB3}Р”РѕРј/РћС‚РµР»СЊ\
+	\n{F5DEB3}Р‘РёР·РЅРµСЃ\
+	\n{F5DEB3}РўСЂР°РЅСЃРїРѕСЂС‚\
+	\n{F5DEB3}Р С‹Р±Р°Р»РєР°/Р•РґР°\
+	\n{F5DEB3}РЎРІР°РґСЊР±С‹\
 	\n{F5DEB3}IRC\
-	\n{F5DEB3}Лидерство\
-	\n{F5DEB3}Анимации\
-	\n{F5DEB3}Законники\
-	\n{F5DEB3}Адвокаты\
-	\n{F5DEB3}МЧС\
-	\n{F5DEB3}Такси\
-	\n{F5DEB3}Наёмные убийцы\
-	\n{F5DEB3}Репортёры",!"Далее",!"Выход");
+	\n{F5DEB3}Р›РёРґРµСЂСЃС‚РІРѕ\
+	\n{F5DEB3}РђРЅРёРјР°С†РёРё\
+	\n{F5DEB3}Р—Р°РєРѕРЅРЅРёРєРё\
+	\n{F5DEB3}РђРґРІРѕРєР°С‚С‹\
+	\n{F5DEB3}РњР§РЎ\
+	\n{F5DEB3}РўР°РєСЃРё\
+	\n{F5DEB3}РќР°С‘РјРЅС‹Рµ СѓР±РёР№С†С‹\
+	\n{F5DEB3}Р РµРїРѕСЂС‚С‘СЂС‹",!"Р”Р°Р»РµРµ",!"Р’С‹С…РѕРґ");
 	return true;
 }
 stock ShowSet(playerid)
 {
-    SPD(playerid, 13, DIALOG_STYLE_LIST, !"Настройки",!"\
-	{F5DEB3}Управление чатом\
-	\n{F5DEB3}Смена пароля\
-	\n{F5DEB3}Защита аккаунта",!"Далее",!"Назад");
+    SPD(playerid, 13, DIALOG_STYLE_LIST, !"РќР°СЃС‚СЂРѕР№РєРё",!"\
+	{F5DEB3}РЈРїСЂР°РІР»РµРЅРёРµ С‡Р°С‚РѕРј\
+	\n{F5DEB3}РЎРјРµРЅР° РїР°СЂРѕР»СЏ\
+	\n{F5DEB3}Р—Р°С‰РёС‚Р° Р°РєРєР°СѓРЅС‚Р°",!"Р”Р°Р»РµРµ",!"РќР°Р·Р°Рґ");
 	return true;
 }
-stock ShowMis(playerid)//Лишь наметка (переделать)
+stock ShowMis(playerid)//Р›РёС€СЊ РЅР°РјРµС‚РєР° (РїРµСЂРµРґРµР»Р°С‚СЊ)
 {
- 	SPD(playerid, 14, DIALOG_STYLE_LIST, !"Ежедневные задания",!"\
-	{F5DEB3}Подрывник\
-	\n{F5DEB3}Водитель погрузчика\
-	\n{F5DEB3}Донор",!"Далее",!"Назад");
+ 	SPD(playerid, 14, DIALOG_STYLE_LIST, !"Р•Р¶РµРґРЅРµРІРЅС‹Рµ Р·Р°РґР°РЅРёСЏ",!"\
+	{F5DEB3}РџРѕРґСЂС‹РІРЅРёРє\
+	\n{F5DEB3}Р’РѕРґРёС‚РµР»СЊ РїРѕРіСЂСѓР·С‡РёРєР°\
+	\n{F5DEB3}Р”РѕРЅРѕСЂ",!"Р”Р°Р»РµРµ",!"РќР°Р·Р°Рґ");
 	return true;
 }
 stock ShowStat(playerid, id)
 {
     static const
-	    	fmt_str[] = "{FFFFFF}ID аккаунта:\t\t\t{F5DEB3}%d\n\
-						\n{FFFFFF}Имя игрока:\t\t\t{F5DEB3}%s\n\
-						\n{FFFFFF}Дата регистрации:\t\t{F5DEB3}%s\n\
-						\n{FFFFFF}Уровень:\t\t\t{F5DEB3}%d\n\
+	    	fmt_str[] = "{FFFFFF}ID Р°РєРєР°СѓРЅС‚Р°:\t\t\t{F5DEB3}%d\n\
+						\n{FFFFFF}РРјСЏ РёРіСЂРѕРєР°:\t\t\t{F5DEB3}%s\n\
+						\n{FFFFFF}Р”Р°С‚Р° СЂРµРіРёСЃС‚СЂР°С†РёРё:\t\t{F5DEB3}%s\n\
+						\n{FFFFFF}РЈСЂРѕРІРµРЅСЊ:\t\t\t{F5DEB3}%d\n\
 						\n{FFFFFF}EXP:\t\t\t\t{F5DEB3}%d/%d\n\
-						\n{FFFFFF}Деньги:\t\t\t\t{F5DEB3}%d\n\
-						\n{FFFFFF}Возраст:\t\t\t{F5DEB3}%d лет\n\
-						\n{FFFFFF}Пол:\t\t\t\t{F5DEB3}%s\n\
-		 				\n{FFFFFF}Национальность:\t\t{F5DEB3}%s";// \t-табуляция текста
+						\n{FFFFFF}Р”РµРЅСЊРіРё:\t\t\t\t{F5DEB3}%d\n\
+						\n{FFFFFF}Р’РѕР·СЂР°СЃС‚:\t\t\t{F5DEB3}%d Р»РµС‚\n\
+						\n{FFFFFF}РџРѕР»:\t\t\t\t{F5DEB3}%s\n\
+		 				\n{FFFFFF}РќР°С†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ:\t\t{F5DEB3}%s";// \t-С‚Р°Р±СѓР»СЏС†РёСЏ С‚РµРєСЃС‚Р°
 	new
-	    	string[sizeof(fmt_str)+MAX_PLAYER_NAME+35];//Отнимаем 2 из-за %s, +1 из-за нуля-терминатора
+	    	string[sizeof(fmt_str)+MAX_PLAYER_NAME+35];//РћС‚РЅРёРјР°РµРј 2 РёР·-Р·Р° %s, +1 РёР·-Р·Р° РЅСѓР»СЏ-С‚РµСЂРјРёРЅР°С‚РѕСЂР°
 
 	format(string, sizeof(string), fmt_str, player[id][pid], GN(id), player[id][pdate_reg], player[id][plevel], player[id][pexp], player[id][pmaxexp],
  	player[id][pmoney], player[id][page], sex_info[player[id][psex] - 1], nations_info[player[id][pnations] - 1]);
 	
-    SPD(playerid, 15, DIALOG_STYLE_MSGBOX, !"Статистика",string,!"Выход",!"Назад");
+    SPD(playerid, 15, DIALOG_STYLE_MSGBOX, !"РЎС‚Р°С‚РёСЃС‚РёРєР°",string,!"Р’С‹С…РѕРґ",!"РќР°Р·Р°Рґ");
 	return true;
 }
 stock ShowSkills(playerid)
 {
-    SPD(playerid, 16, DIALOG_STYLE_LIST, !"Навыки",!"\
-	",!"Далее",!"Назад");
+    SPD(playerid, 16, DIALOG_STYLE_LIST, !"РќР°РІС‹РєРё",!"\
+	",!"Р”Р°Р»РµРµ",!"РќР°Р·Р°Рґ");
 	return true;
 }
 stock ShowLic(playerid)
 {
-    SPD(playerid, 17, DIALOG_STYLE_LIST, !"Лицензии",!"\
-	",!"Далее",!"Назад");
+    SPD(playerid, 17, DIALOG_STYLE_LIST, !"Р›РёС†РµРЅР·РёРё",!"\
+	",!"Р”Р°Р»РµРµ",!"РќР°Р·Р°Рґ");
 	return true;
 }
 stock PayDay()
 {
 	gettime(hour_server, minute_server, second_server);
 	SetWorldTime(hour_server);
-	foreach(new i: Player)//forearch нужен для создания цикла для игроков
+	foreach(new i: Player)//forearch РЅСѓР¶РµРЅ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ С†РёРєР»Р° РґР»СЏ РёРіСЂРѕРєРѕРІ
 	{
 		if(login_check{i} == false)
 		    return true;
@@ -1683,7 +1683,7 @@ stock PayDay()
 		    player[i][pexp] = 0;
 		    player[i][plevel] ++;
 		    player[i][pmaxexp] = player[i][pmaxexp]*2;
-		    SCM(i, ColorGreen, !"Поздравляем! Вы получили новый уровень!");
+		    SCM(i, ColorGreen, !"РџРѕР·РґСЂР°РІР»СЏРµРј! Р’С‹ РїРѕР»СѓС‡РёР»Рё РЅРѕРІС‹Р№ СѓСЂРѕРІРµРЅСЊ!");
 		    SetPlayerScore(i, player[i][plevel]);
       		SavePlayer(i, "Level", player[i][plevel], "d");
       		SavePlayer(i, "Money", player[i][pmoney], "d");
@@ -1691,10 +1691,10 @@ stock PayDay()
 		    if(player[i][plevel] == 3 && player[i][preferal_check] == 1)
 		    {
 		        static
-   					fmt_str[] = "INSERT INTO `referal` (`Name`) VALUES ('%s')";// \t-табуляция текста
+   					fmt_str[] = "INSERT INTO `referal` (`Name`) VALUES ('%s')";// \t-С‚Р°Р±СѓР»СЏС†РёСЏ С‚РµРєСЃС‚Р°
 				new
 					string[sizeof(fmt_str)+ MAX_PLAYER_NAME-1];
-				mysql_format(connect_mysql, string, sizeof(string), fmt_str, player[i][preferal]);// Обновляем данные в таблице
+				mysql_format(connect_mysql, string, sizeof(string), fmt_str, player[i][preferal]);// РћР±РЅРѕРІР»СЏРµРј РґР°РЅРЅС‹Рµ РІ С‚Р°Р±Р»РёС†Рµ
 				mysql_function_query(connect_mysql, string, false, "", "");
 		        player[i][preferal_check] = 0;
 		        SavePlayer(i, "Referal Check", player[i][preferal_check], "d");
@@ -1703,7 +1703,7 @@ stock PayDay()
 		SCM(i, ColorOrange, !"==============================");
   		SavePlayer(i, "Exp", player[i][pexp], "d");
     	SavePlayer(i, "Maxexp", player[i][pmaxexp], "d");
-		//SavePlayer(i, "Exp", player[i][pexp], "d");// Для проверки по форматам
+		//SavePlayer(i, "Exp", player[i][pexp], "d");// Р”Р»СЏ РїСЂРѕРІРµСЂРєРё РїРѕ С„РѕСЂРјР°С‚Р°Рј
 	}
 	return true;
 }
@@ -1712,9 +1712,9 @@ stock SavePlayer(playerid, const field_name[], const set[], const type[])
 	new
 	    string[128+1];
 	    
-	if(!strcmp(type, "d", true))//Проверки по форматам
-	    mysql_format(connect_mysql, string, sizeof(string), "UPDATE `accounts` SET `%s` = '%d' WHERE `Name` = '%s' LIMIT 1", field_name, set, GN(playerid));// Обновляем данные в таблице
- 	else if(!strcmp(type, "s", true))//Проверки по форматам
+	if(!strcmp(type, "d", true))//РџСЂРѕРІРµСЂРєРё РїРѕ С„РѕСЂРјР°С‚Р°Рј
+	    mysql_format(connect_mysql, string, sizeof(string), "UPDATE `accounts` SET `%s` = '%d' WHERE `Name` = '%s' LIMIT 1", field_name, set, GN(playerid));// РћР±РЅРѕРІР»СЏРµРј РґР°РЅРЅС‹Рµ РІ С‚Р°Р±Р»РёС†Рµ
+ 	else if(!strcmp(type, "s", true))//РџСЂРѕРІРµСЂРєРё РїРѕ С„РѕСЂРјР°С‚Р°Рј
 	    mysql_format(connect_mysql, string, sizeof(string), "UPDATE `accounts` SET `%s` = '%s' WHERE `Name` = '%s' LIMIT 1", field_name, set, GN(playerid));
 
     mysql_function_query(connect_mysql, string, false, "", "");
@@ -1723,62 +1723,62 @@ stock SavePlayer(playerid, const field_name[], const set[], const type[])
 stock SavePlayerExit(playerid)
 {
     static
-   		fmt_str[] = "UPDATE `accounts` SET `Money` = '%d', `Exp` = '%d', `Level` = '%d', `Maxexp` = '%d' WHERE `Name` = '%s' LIMIT 1";// \t-табуляция текста
+   		fmt_str[] = "UPDATE `accounts` SET `Money` = '%d', `Exp` = '%d', `Level` = '%d', `Maxexp` = '%d' WHERE `Name` = '%s' LIMIT 1";// \t-С‚Р°Р±СѓР»СЏС†РёСЏ С‚РµРєСЃС‚Р°
 	new
 		string[sizeof(fmt_str)+ MAX_PLAYER_NAME + 13];
-	mysql_format(connect_mysql, string, sizeof(string), fmt_str, player[playerid][pmoney], player[playerid][pexp], player[playerid][plevel], player[playerid][pmaxexp], GN(playerid));// Обновляем данные в таблице
+	mysql_format(connect_mysql, string, sizeof(string), fmt_str, player[playerid][pmoney], player[playerid][pexp], player[playerid][plevel], player[playerid][pmaxexp], GN(playerid));// РћР±РЅРѕРІР»СЏРµРј РґР°РЅРЅС‹Рµ РІ С‚Р°Р±Р»РёС†Рµ
 	mysql_function_query(connect_mysql, string, false, "", "");
 }
 stock ComBase(playerid)
 {
-    SPD(playerid, 18, DIALOG_STYLE_MSGBOX, !"Команды",!"\
-	{F5DEB3}/kpk - Открыть меню\
-	\n{F5DEB3}/gps - Открыть навигатор\
-	\n{F5DEB3}/report - Отправить сообщение админам\
-	\n{F5DEB3}/donate - Покупки за донат валюту\
-	\n{F5DEB3}/time - Узнать время",!"Назад",!"Выход");
+    SPD(playerid, 18, DIALOG_STYLE_MSGBOX, !"РљРѕРјР°РЅРґС‹",!"\
+	{F5DEB3}/kpk - РћС‚РєСЂС‹С‚СЊ РјРµРЅСЋ\
+	\n{F5DEB3}/gps - РћС‚РєСЂС‹С‚СЊ РЅР°РІРёРіР°С‚РѕСЂ\
+	\n{F5DEB3}/report - РћС‚РїСЂР°РІРёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ Р°РґРјРёРЅР°Рј\
+	\n{F5DEB3}/donate - РџРѕРєСѓРїРєРё Р·Р° РґРѕРЅР°С‚ РІР°Р»СЋС‚Сѓ\
+	\n{F5DEB3}/time - РЈР·РЅР°С‚СЊ РІСЂРµРјСЏ",!"РќР°Р·Р°Рґ",!"Р’С‹С…РѕРґ");
 	return true;
 }
-//Шаблон для стока
-/*stock Имя(playerid, функции)
+//РЁР°Р±Р»РѕРЅ РґР»СЏ СЃС‚РѕРєР°
+/*stock РРјСЏ(playerid, С„СѓРЅРєС†РёРё)
 {
 	return true;
 }*/
 stock DialogReport(playerid)
 {
-	SPD(playerid, 19, DIALOG_STYLE_INPUT, !"Репорт", !"{FFFFFF}Напишите свой вопрос/жалобу администрации:", !"Далее", !"Назад");
+	SPD(playerid, 19, DIALOG_STYLE_INPUT, !"Р РµРїРѕСЂС‚", !"{FFFFFF}РќР°РїРёС€РёС‚Рµ СЃРІРѕР№ РІРѕРїСЂРѕСЃ/Р¶Р°Р»РѕР±Сѓ Р°РґРјРёРЅРёСЃС‚СЂР°С†РёРё:", !"Р”Р°Р»РµРµ", !"РќР°Р·Р°Рґ");
 	return true;
 }
 stock AdmChat(color, str[])
 {
-	foreach(new i: connect_admins) SCM(i, color, str);// Перебераем лишь тех игроков, которые попали под данный итератор
+	foreach(new i: connect_admins) SCM(i, color, str);// РџРµСЂРµР±РµСЂР°РµРј Р»РёС€СЊ С‚РµС… РёРіСЂРѕРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ РїРѕРїР°Р»Рё РїРѕРґ РґР°РЅРЅС‹Р№ РёС‚РµСЂР°С‚РѕСЂ
 	return true;
 }
 stock DialogDonateConv(playerid)
 {
     static const
-	    	fmt_str[] = "Донат рублей: {FFFF00}%d";
+	    	fmt_str[] = "Р”РѕРЅР°С‚ СЂСѓР±Р»РµР№: {FFFF00}%d";
 	new
 	    	string[sizeof(fmt_str)+10];
 
 	format(string, sizeof(string), fmt_str, player[playerid][pdonate]);
-    SPD(playerid, 21, DIALOG_STYLE_INPUT, string, !"{FFFFFF}Конвертация по курсу: 1 руб = 10.000$, введите сумму:", !"Далее", !"Назад");
+    SPD(playerid, 21, DIALOG_STYLE_INPUT, string, !"{FFFFFF}РљРѕРЅРІРµСЂС‚Р°С†РёСЏ РїРѕ РєСѓСЂСЃСѓ: 1 СЂСѓР± = 10.000$, РІРІРµРґРёС‚Рµ СЃСѓРјРјСѓ:", !"Р”Р°Р»РµРµ", !"РќР°Р·Р°Рґ");
 	return true;
 }
 stock DialogAdminRegistration(playerid)
 {
-    SPD(playerid, 22, DIALOG_STYLE_INPUT, !"Админ-регистрация", !"\
-		{FFFFFF}Придумайте ваш админ-пароль:\
-		\n{FFFFFF}Его вы будете использовать каждый раз при админ-авторизации!\
-		\n{DF8600}Длина пароля от 6 до 20 символов.\
-		\n", !"Далее", !"Назад");
+    SPD(playerid, 22, DIALOG_STYLE_INPUT, !"РђРґРјРёРЅ-СЂРµРіРёСЃС‚СЂР°С†РёСЏ", !"\
+		{FFFFFF}РџСЂРёРґСѓРјР°Р№С‚Рµ РІР°С€ Р°РґРјРёРЅ-РїР°СЂРѕР»СЊ:\
+		\n{FFFFFF}Р•РіРѕ РІС‹ Р±СѓРґРµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєР°Р¶РґС‹Р№ СЂР°Р· РїСЂРё Р°РґРјРёРЅ-Р°РІС‚РѕСЂРёР·Р°С†РёРё!\
+		\n{DF8600}Р”Р»РёРЅР° РїР°СЂРѕР»СЏ РѕС‚ 6 РґРѕ 20 СЃРёРјРІРѕР»РѕРІ.\
+		\n", !"Р”Р°Р»РµРµ", !"РќР°Р·Р°Рґ");
 	return true;
 }
 stock DialogAdminLogin(playerid)
 {
-    SPD(playerid, 23, DIALOG_STYLE_PASSWORD, !"Админ-авторизация", !"\
-		{FFFFFF}Введите ваш админ-пароль:\
-		\n", !"Далее", !"Назад");
+    SPD(playerid, 23, DIALOG_STYLE_PASSWORD, !"РђРґРјРёРЅ-Р°РІС‚РѕСЂРёР·Р°С†РёСЏ", !"\
+		{FFFFFF}Р’РІРµРґРёС‚Рµ РІР°С€ Р°РґРјРёРЅ-РїР°СЂРѕР»СЊ:\
+		\n", !"Р”Р°Р»РµРµ", !"РќР°Р·Р°Рґ");
 	return true;
 }
 stock ClearKillFeed(playerid = INVALID_PLAYER_ID)
@@ -1830,8 +1830,8 @@ stock Clist(playerid)
 {
 	switch(player[playerid][pmember])
 	{
-	    case 0: SetPlayerColor(playerid, 0xFFFFFF00);//Установка цвета ника игрока
-	    case 1..3: SetPlayerColor(playerid, 0x0100F6AA);//Установка цвета ника игрока (с диапозоном кейсов)
+	    case 0: SetPlayerColor(playerid, 0xFFFFFF00);//РЈСЃС‚Р°РЅРѕРІРєР° С†РІРµС‚Р° РЅРёРєР° РёРіСЂРѕРєР°
+	    case 1..3: SetPlayerColor(playerid, 0x0100F6AA);//РЈСЃС‚Р°РЅРѕРІРєР° С†РІРµС‚Р° РЅРёРєР° РёРіСЂРѕРєР° (СЃ РґРёР°РїРѕР·РѕРЅРѕРј РєРµР№СЃРѕРІ)
 	}
 }
 stock ProxDetector(Float:radi, playerid, string[], col1, col2, col3, col4, col5)
@@ -1915,17 +1915,17 @@ stock GetVehicleName(carid)
 }
 stock Pickups()
 {
-	lspd_pick[0] = CreateDynamicPickup(1318, 23, 1555.5059, -1675.7415, 16.1953); //(id pickup-а, тип pickup-а, кооры) Дверь на улице
-	lspd_pick[1] = CreateDynamicPickup(1318, 23, 1568.6741, -1689.9702, 6.2188);//(id pickup-а, тип pickup-а, кооры) Дверь в гараже
-	lspd_pick[2] = CreateDynamicPickup(1318, 23, 246.8043, 62.3237, 1003.6406, 1, 6);//(id pickup-а, тип pickup-а, кооры) Дверь в участке
-	lspd_pick[3] = CreateDynamicPickup(1318, 23, 246.4056, 88.0078, 1003.6406, 1, 6);//(id pickup-а, тип pickup-а, кооры) Дверь из гаража
-	lspd_pick[4] = CreateDynamicPickup(1318, 23, 1524.4835,-1677.8490,6.2188); // Дверь в оружейную
-	lspd_pick[5] = CreateDynamicPickup(1318, 23, 316.3202,-170.2966,999.5938); // Дверь из оружейной
-	lspd_pick[6] = CreateDynamicPickup(2061, 23, 312.1859,-168.7103,999.5938); // Боеприпасы
+	lspd_pick[0] = CreateDynamicPickup(1318, 23, 1555.5059, -1675.7415, 16.1953); //(id pickup-Р°, С‚РёРї pickup-Р°, РєРѕРѕСЂС‹) Р”РІРµСЂСЊ РЅР° СѓР»РёС†Рµ
+	lspd_pick[1] = CreateDynamicPickup(1318, 23, 1568.6741, -1689.9702, 6.2188);//(id pickup-Р°, С‚РёРї pickup-Р°, РєРѕРѕСЂС‹) Р”РІРµСЂСЊ РІ РіР°СЂР°Р¶Рµ
+	lspd_pick[2] = CreateDynamicPickup(1318, 23, 246.8043, 62.3237, 1003.6406, 1, 6);//(id pickup-Р°, С‚РёРї pickup-Р°, РєРѕРѕСЂС‹) Р”РІРµСЂСЊ РІ СѓС‡Р°СЃС‚РєРµ
+	lspd_pick[3] = CreateDynamicPickup(1318, 23, 246.4056, 88.0078, 1003.6406, 1, 6);//(id pickup-Р°, С‚РёРї pickup-Р°, РєРѕРѕСЂС‹) Р”РІРµСЂСЊ РёР· РіР°СЂР°Р¶Р°
+	lspd_pick[4] = CreateDynamicPickup(1318, 23, 1524.4835,-1677.8490,6.2188); // Р”РІРµСЂСЊ РІ РѕСЂСѓР¶РµР№РЅСѓСЋ
+	lspd_pick[5] = CreateDynamicPickup(1318, 23, 316.3202,-170.2966,999.5938); // Р”РІРµСЂСЊ РёР· РѕСЂСѓР¶РµР№РЅРѕР№
+	lspd_pick[6] = CreateDynamicPickup(2061, 23, 312.1859,-168.7103,999.5938); // Р‘РѕРµРїСЂРёРїР°СЃС‹
 }
-stock Cars()//Сток со спавном транспорта
+stock Cars()//РЎС‚РѕРє СЃРѕ СЃРїР°РІРЅРѕРј С‚СЂР°РЅСЃРїРѕСЂС‚Р°
 {
-    lspd_car[0] = AddStaticVehicleEx(596, 1602.4960, -1683.9705, 5.6106, 89.9966, 0, 1, 600);//Спавн транспорта (id транспорта, кооры, угол поворота, цвета, время респавна)
+    lspd_car[0] = AddStaticVehicleEx(596, 1602.4960, -1683.9705, 5.6106, 89.9966, 0, 1, 600);//РЎРїР°РІРЅ С‚СЂР°РЅСЃРїРѕСЂС‚Р° (id С‚СЂР°РЅСЃРїРѕСЂС‚Р°, РєРѕРѕСЂС‹, СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р°, С†РІРµС‚Р°, РІСЂРµРјСЏ СЂРµСЃРїР°РІРЅР°)
 	lspd_car[1] = AddStaticVehicleEx(596, 1602.4961, -1688.1863, 5.6106, 89.9944, 0, 1, 600);
 	lspd_car[2] = AddStaticVehicleEx(596, 1602.4960, -1692.1858, 5.6106, 89.9963, 0, 1, 600);
 	lspd_car[3] = AddStaticVehicleEx(596, 1602.4961, -1696.4399, 5.6106, 89.9965, 0, 1, 600);
@@ -1955,35 +1955,35 @@ stock Cars()//Сток со спавном транспорта
 }
 stock DialogGunLSPD(playerid)
 {
-    SPD(playerid, 26, DIALOG_STYLE_TABLIST_HEADERS, "Оружейный склад",
+    SPD(playerid, 26, DIALOG_STYLE_TABLIST_HEADERS, "РћСЂСѓР¶РµР№РЅС‹Р№ СЃРєР»Р°Рґ",
 	!"\
-		{FFFFFF}Имя:\t{FFFFFF}Патроны:\
+		{FFFFFF}РРјСЏ:\t{FFFFFF}РџР°С‚СЂРѕРЅС‹:\
 		\n1) Deagle\t\t35\
 		\n2) ShotGun\t\t20\
 		\n3) MP5\t\t60\
-		\n4) Сухпаёк\
-		\n5) Бронежилет", "Выбрать", "Отмена\
+		\n4) РЎСѓС…РїР°С‘Рє\
+		\n5) Р‘СЂРѕРЅРµР¶РёР»РµС‚", "Р’С‹Р±СЂР°С‚СЊ", "РћС‚РјРµРЅР°\
 	");
 }
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Команды сервера ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cmd:menu(playerid)//cmd:имя команды(playerid, params[])
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ РљРѕРјР°РЅРґС‹ СЃРµСЂРІРµСЂР° ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cmd:menu(playerid)//cmd:РёРјСЏ РєРѕРјР°РЅРґС‹(playerid, params[])
 {
-    SPD(playerid, 8, DIALOG_STYLE_LIST, !"КПК",!"\
-	{F5DEB3}Персонаж\
-	\n{F5DEB3}Навигация\
-	\n{F5DEB3}Игроки онлайн\
-	\n{F5DEB3}Команды сервера\
-	\n{F5DEB3}Настройки\
-	\n{F5DEB3}Ежедневные задания",!"Далее",!"Выход");
+    SPD(playerid, 8, DIALOG_STYLE_LIST, !"РљРџРљ",!"\
+	{F5DEB3}РџРµСЂСЃРѕРЅР°Р¶\
+	\n{F5DEB3}РќР°РІРёРіР°С†РёСЏ\
+	\n{F5DEB3}РРіСЂРѕРєРё РѕРЅР»Р°Р№РЅ\
+	\n{F5DEB3}РљРѕРјР°РЅРґС‹ СЃРµСЂРІРµСЂР°\
+	\n{F5DEB3}РќР°СЃС‚СЂРѕР№РєРё\
+	\n{F5DEB3}Р•Р¶РµРґРЅРµРІРЅС‹Рµ Р·Р°РґР°РЅРёСЏ",!"Р”Р°Р»РµРµ",!"Р’С‹С…РѕРґ");
 	return true;
 }
-alias:menu("mm", "mn", "kpk");//alias:команда(альтернативные команды);
+alias:menu("mm", "mn", "kpk");//alias:РєРѕРјР°РЅРґР°(Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ РєРѕРјР°РЅРґС‹);
 cmd:time(playerid)
 {
     new
 		string[84];
     gettime(hour_server, minute_server, second_server);
-    format(string, sizeof(string), "{008000}Время на сервере: %d часов %d минут %d секунд", hour_server, minute_server, second_server);
+    format(string, sizeof(string), "{008000}Р’СЂРµРјСЏ РЅР° СЃРµСЂРІРµСЂРµ: %d С‡Р°СЃРѕРІ %d РјРёРЅСѓС‚ %d СЃРµРєСѓРЅРґ", hour_server, minute_server, second_server);
     SCM(playerid, 0x008000FF, string);
 }
 cmd:gps(playerid)
@@ -1996,31 +1996,31 @@ cmd:report(playerid)
 }
 cmd:donate(playerid)
 {
-    SPD(playerid, 20, DIALOG_STYLE_LIST, !"Донат-магазин",!"\
-	{F5DEB3}Игровая валюта\
-	\n{F5DEB3}Выбрать\
-	\n{F5DEB3}Выбрать",!"Выбрать",!"Выход");
+    SPD(playerid, 20, DIALOG_STYLE_LIST, !"Р”РѕРЅР°С‚-РјР°РіР°Р·РёРЅ",!"\
+	{F5DEB3}РРіСЂРѕРІР°СЏ РІР°Р»СЋС‚Р°\
+	\n{F5DEB3}Р’С‹Р±СЂР°С‚СЊ\
+	\n{F5DEB3}Р’С‹Р±СЂР°С‚СЊ",!"Р’С‹Р±СЂР°С‚СЊ",!"Р’С‹С…РѕРґ");
 	return true;
 }
 alias:donate("donat", "don");
 cmd:kick(playerid, params[])
 {
 	if(player[playerid][padmin] < 1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
     if(access_check{playerid} == false)
 	    return DialogAdminLogin(playerid);
     if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
-	if(sscanf(params, "ds[144]", params[0], params[1]))//"ds" - спецификаторы, params[0] - ID, params[1] - Причина([144] - размер)
-		return SCM(playerid, ColorGreen, !"Введите команду /kick [ID] [Причина]");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
+	if(sscanf(params, "ds[144]", params[0], params[1]))//"ds" - СЃРїРµС†РёС„РёРєР°С‚РѕСЂС‹, params[0] - ID, params[1] - РџСЂРёС‡РёРЅР°([144] - СЂР°Р·РјРµСЂ)
+		return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /kick [ID] [РџСЂРёС‡РёРЅР°]");
 	if(!IsPlayerConnected(params[0]))
-	    return SCM(playerid, ColorRed, !"Игрок не найден!");
+	    return SCM(playerid, ColorRed, !"РРіСЂРѕРє РЅРµ РЅР°Р№РґРµРЅ!");
 	if(login_check{params[0]} == false)
-		return SCM(playerid, ColorRed, !"Игрок не авторизован!");
+		return SCM(playerid, ColorRed, !"РРіСЂРѕРє РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ!");
 	if(player[params[0]][padmin] >= player[playerid][padmin])
-	    return SCM(playerid, ColorRed, !"Введенный игрок выше вас или равен вам по уровню администрирования!");
+	    return SCM(playerid, ColorRed, !"Р’РІРµРґРµРЅРЅС‹Р№ РёРіСЂРѕРє РІС‹С€Рµ РІР°СЃ РёР»Рё СЂР°РІРµРЅ РІР°Рј РїРѕ СѓСЂРѕРІРЅСЋ Р°РґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёСЏ!");
 	static const
-	    	fmt_str[] = "Администратор %s кикнул игрока %s. Причина: %s";
+	    	fmt_str[] = "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ %s РєРёРєРЅСѓР» РёРіСЂРѕРєР° %s. РџСЂРёС‡РёРЅР°: %s";
 	new
 	    	string[sizeof(fmt_str)+MAX_PLAYER_NAME*2+70];
 
@@ -2032,7 +2032,7 @@ cmd:kick(playerid, params[])
 cmd:alogin(playerid, params[])
 {
     if(player[playerid][padmin] < 1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
 	    DialogAdminRegistration(playerid);
 	if(access_check{playerid} == false)
@@ -2041,61 +2041,61 @@ cmd:alogin(playerid, params[])
 }
 cmd:ahelp(playerid)
 {
-    if(player[playerid][padmin] < 1)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 1)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
 	    
-	SPD(playerid, 24, DIALOG_STYLE_LIST, !"Админ-команды", !"\
-		{DF8600}Введите уровень админки:\
-		{FFFFFF}1 уровень\
-		{FFFFFF}2 уровень\
-		{FFFFFF}3 уровень\
-		{FFFFFF}4 уровень\
-		{FFFFFF}5 уровень\
-		{FFFFFF}6 уровень\
-		{FFFFFF}7 уровень\
-		{FFFFFF}8 уровень\
-		\n", !"Выбрать", !"Отмена");
+	SPD(playerid, 24, DIALOG_STYLE_LIST, !"РђРґРјРёРЅ-РєРѕРјР°РЅРґС‹", !"\
+		{DF8600}Р’РІРµРґРёС‚Рµ СѓСЂРѕРІРµРЅСЊ Р°РґРјРёРЅРєРё:\
+		{FFFFFF}1 СѓСЂРѕРІРµРЅСЊ\
+		{FFFFFF}2 СѓСЂРѕРІРµРЅСЊ\
+		{FFFFFF}3 СѓСЂРѕРІРµРЅСЊ\
+		{FFFFFF}4 СѓСЂРѕРІРµРЅСЊ\
+		{FFFFFF}5 СѓСЂРѕРІРµРЅСЊ\
+		{FFFFFF}6 СѓСЂРѕРІРµРЅСЊ\
+		{FFFFFF}7 СѓСЂРѕРІРµРЅСЊ\
+		{FFFFFF}8 СѓСЂРѕРІРµРЅСЊ\
+		\n", !"Р’С‹Р±СЂР°С‚СЊ", !"РћС‚РјРµРЅР°");
 	return true;
 }
 cmd:makeleader(playerid, params[])
 {
-    if(player[playerid][padmin] < 6)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 6)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
     if(sscanf(params, "dd", params[0], params[1]))
-		return SCM(playerid, ColorGreen, !"Введите команду /makeleader [ID] [ID фракции (0 - 1)]");//Временно
-		//return SCM(playerid, ColorGreen, strcat(!"Введите команду /makeleader [ID] [ID фракции (0 - ", MAX_LEADER));
+		return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /makeleader [ID] [ID С„СЂР°РєС†РёРё (0 - 1)]");//Р’СЂРµРјРµРЅРЅРѕ
+		//return SCM(playerid, ColorGreen, strcat(!"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /makeleader [ID] [ID С„СЂР°РєС†РёРё (0 - ", MAX_LEADER));
 	if(!IsPlayerConnected(params[0]))
-	    return SCM(playerid, ColorRed, !"Игрок не найден!");
+	    return SCM(playerid, ColorRed, !"РРіСЂРѕРє РЅРµ РЅР°Р№РґРµРЅ!");
 	if(login_check{params[0]} == false)
-		return SCM(playerid, ColorRed, !"Игрок не авторизован!");
+		return SCM(playerid, ColorRed, !"РРіСЂРѕРє РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ!");
 	if(!(0 <= params[1] <= MAX_LEADER_NUM))
-	    return SCM(playerid, ColorGreen, !"Фракции с данным ID не существует!");
+	    return SCM(playerid, ColorGreen, !"Р¤СЂР°РєС†РёРё СЃ РґР°РЅРЅС‹Рј ID РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚!");
 	if(params[1] == 0)
 	{
 	    if(player[params[0]][pmember] == 0)
-	        return SCM(playerid, ColorGreen, !"Игрок не состоит во фракции!");
+	        return SCM(playerid, ColorGreen, !"РРіСЂРѕРє РЅРµ СЃРѕСЃС‚РѕРёС‚ РІРѕ С„СЂР°РєС†РёРё!");
 	        
 		player[params[0]][pmember] = 0;
 		player[params[0]][prank] = 0;
 		SavePlayer(params[0], "Member", player[params[0]][pmember], "d");
 		SavePlayer(params[0], "Rank", player[params[0]][prank], "d");
 		ClearKillFeed(params[0]);
-		ResetPlayerWeapons(params[0]);//Обнуление оружия игроков
-		SetPlayerArmour(params[0], 0.0);//Установка уровня брони
-		SetPlayerHealth(params[0], 100.0);//Установка уровня здоровья
+		ResetPlayerWeapons(params[0]);//РћР±РЅСѓР»РµРЅРёРµ РѕСЂСѓР¶РёСЏ РёРіСЂРѕРєРѕРІ
+		SetPlayerArmour(params[0], 0.0);//РЈСЃС‚Р°РЅРѕРІРєР° СѓСЂРѕРІРЅСЏ Р±СЂРѕРЅРё
+		SetPlayerHealth(params[0], 100.0);//РЈСЃС‚Р°РЅРѕРІРєР° СѓСЂРѕРІРЅСЏ Р·РґРѕСЂРѕРІСЊСЏ
 		SetPlayerSkin(params[0], player[params[0]][pskin]);
 		Clist(params[0]);
 		static const
-			fmt_str[] = "Вы сняли %s[%d] с лидерки",
-		    fmt_str_2[] = "Администратор %s[%d] снял вас с лидерки";
+			fmt_str[] = "Р’С‹ СЃРЅСЏР»Рё %s[%d] СЃ Р»РёРґРµСЂРєРё",
+		    fmt_str_2[] = "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ %s[%d] СЃРЅСЏР» РІР°СЃ СЃ Р»РёРґРµСЂРєРё";
 		new
 		    string[sizeof(fmt_str) + MAX_PLAYER_NAME],
 		    string_2[sizeof(fmt_str_2) + MAX_PLAYER_NAME];
@@ -2129,8 +2129,8 @@ cmd:makeleader(playerid, params[])
 	SavePlayer(params[0], "Member", player[params[0]][pmember], "d");
 	SavePlayer(params[0], "Rank", player[params[0]][prank], "d");
 	static const
-		fmt_str[] = "Вы назначили %s[%d] на лидерку %s",
-	    fmt_str_2[] = "Администратор %s[%d] назначил %s[%d] на лидерку %s";
+		fmt_str[] = "Р’С‹ РЅР°Р·РЅР°С‡РёР»Рё %s[%d] РЅР° Р»РёРґРµСЂРєСѓ %s",
+	    fmt_str_2[] = "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ %s[%d] РЅР°Р·РЅР°С‡РёР» %s[%d] РЅР° Р»РёРґРµСЂРєСѓ %s";
 	new
  		string[sizeof(fmt_str) + MAX_PLAYER_NAME + 30],
    		string_2[sizeof(fmt_str_2) + MAX_PLAYER_NAME + 30];
@@ -2143,32 +2143,32 @@ cmd:makeleader(playerid, params[])
 }
 cmd:veh(playerid, params[])
 {
-    if(player[playerid][padmin] < 3)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 3)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
 	if(sscanf(params, "ddd", params[0], params[1], params[2]))
-		return SCM(playerid, ColorGreen, !"Введите команду /veh [ID транспорта] [ID первого цвета] [ID второго цвета]");
+		return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /veh [ID С‚СЂР°РЅСЃРїРѕСЂС‚Р°] [ID РїРµСЂРІРѕРіРѕ С†РІРµС‚Р°] [ID РІС‚РѕСЂРѕРіРѕ С†РІРµС‚Р°]");
 	if(!(400 <= params[0] <= 611))
-		return SCM(playerid, ColorGreen, !"Неверный id транспорта [400 - 611]");
+		return SCM(playerid, ColorGreen, !"РќРµРІРµСЂРЅС‹Р№ id С‚СЂР°РЅСЃРїРѕСЂС‚Р° [400 - 611]");
 	if(params[1] < 0 || params[1] > 255 || params[2] < 0 || params[2] > 255)
-		return SCM(playerid, ColorGreen, !"Неверный id цвета");
+		return SCM(playerid, ColorGreen, !"РќРµРІРµСЂРЅС‹Р№ id С†РІРµС‚Р°");
 	
 	new
 	    currentveh,
 	    Float: X,
 		Float: Y,
 		Float: Z,
-		Float: Angle; //АХТУНГ, Float в pawn должен быть с большой буквы
+		Float: Angle; //РђРҐРўРЈРќР“, Float РІ pawn РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЃ Р±РѕР»СЊС€РѕР№ Р±СѓРєРІС‹
 		
 	GetPlayerFacingAngle(playerid, Angle);
 	GetPlayerPos(playerid, X, Y, Z);
-	currentveh = CreateVehicle(params[0], X + 3.0, Y, Z + 1.0, Angle, params[1], params[2], 99999);//Создание транспорта(В конце - цвета и время спавна)
+	currentveh = CreateVehicle(params[0], X + 3.0, Y, Z + 1.0, Angle, params[1], params[2], 99999);//РЎРѕР·РґР°РЅРёРµ С‚СЂР°РЅСЃРїРѕСЂС‚Р°(Р’ РєРѕРЅС†Рµ - С†РІРµС‚Р° Рё РІСЂРµРјСЏ СЃРїР°РІРЅР°)
 	SetVehicleNumberPlate(currentveh, "Admin");
 	static const
-			fmt_str[] = "Вы создали транспорт - {FFFF00}%s";
+			fmt_str[] = "Р’С‹ СЃРѕР·РґР°Р»Рё С‚СЂР°РЅСЃРїРѕСЂС‚ - {FFFF00}%s";
 	new
 		    string[sizeof(fmt_str) + 40];
 
@@ -2178,12 +2178,12 @@ cmd:veh(playerid, params[])
 }
 cmd:destroyveh(playerid)
 {
-    if(player[playerid][padmin] < 3)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 3)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
 	new
 		currentveh;
 	currentveh = GetPlayerVehicleID(playerid);
@@ -2193,12 +2193,12 @@ cmd:destroyveh(playerid)
 alias:destroyveh("remove", "remveh", "delveh");
 cmd:elegyveh(playerid)
 {
-    if(player[playerid][padmin] < 3)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 3)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
     new
 		elegytun,
 		Float: X,
@@ -2225,12 +2225,12 @@ cmd:elegyveh(playerid)
 }
 cmd:sultanveh(playerid)
 {
-    if(player[playerid][padmin] < 3)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 3)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
     new
 		sultanveh,
 		Float: X,
@@ -2257,12 +2257,12 @@ cmd:sultanveh(playerid)
 }
 cmd:flashveh(playerid)
 {
-    if(player[playerid][padmin] < 3)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 3)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
     new
 		flashveh,
 		Float: X,
@@ -2284,17 +2284,17 @@ cmd:flashveh(playerid)
     AddVehicleComponent(flashveh,1010);
     AddVehicleComponent(flashveh,1080);
     AddVehicleComponent(flashveh,1087);
-    SetVehicleNumberPlate(flashveh, "Admin");//(id транспорта, надпись)
+    SetVehicleNumberPlate(flashveh, "Admin");//(id С‚СЂР°РЅСЃРїРѕСЂС‚Р°, РЅР°РґРїРёСЃСЊ)
 	return true;
 }
 cmd:vehid(playerid)
 {
-    if(player[playerid][padmin] < 3)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 3)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
 	new
 		currentveh,
 		vehmodel;
@@ -2302,7 +2302,7 @@ cmd:vehid(playerid)
 	currentveh = GetPlayerVehicleID(playerid);
 	vehmodel = GetVehicleModel(currentveh);
 	static const
-		fmt_str[] = "Данный транспорт имеет id: {FFFF00}%d {008000}, модель транспорта: {FFFF00}%s[%d]";
+		fmt_str[] = "Р”Р°РЅРЅС‹Р№ С‚СЂР°РЅСЃРїРѕСЂС‚ РёРјРµРµС‚ id: {FFFF00}%d {008000}, РјРѕРґРµР»СЊ С‚СЂР°РЅСЃРїРѕСЂС‚Р°: {FFFF00}%s[%d]";
 	new
  		string[sizeof(fmt_str) + 30];
 
@@ -2310,16 +2310,16 @@ cmd:vehid(playerid)
 	SCM(playerid, ColorGreen, string);
 	return true;
 }
-cmd:changenumberplate(playerid, params[]) //Доделать
+cmd:changenumberplate(playerid, params[]) //Р”РѕРґРµР»Р°С‚СЊ
 {
-    if(player[playerid][padmin] < 3)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 3)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
 	if(sscanf(params, "s", params[0]))
-		return SCM(playerid, ColorGreen, !"Введите команду /changenumberplate [Номерной знак]");
+		return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /changenumberplate [РќРѕРјРµСЂРЅРѕР№ Р·РЅР°Рє]");
 	new
 	    currentveh,
 	    string[20];
@@ -2330,28 +2330,28 @@ cmd:changenumberplate(playerid, params[]) //Доделать
 }
 cmd:spawn(playerid)
 {
-    if(player[playerid][padmin] < 1)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 1)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
 	SetPlayerSpawn(playerid);
 	return true;
 }
-CMD:test(playerid)// Тест команда
+CMD:test(playerid)// РўРµСЃС‚ РєРѕРјР°РЅРґР°
 {
-    if(player[playerid][padmin] < 7)//Вставить в каждую админ-команду (1)
-	    return SCM(playerid, ColorRed, !"Вы не уполномочены использовать данную команду!");
+    if(player[playerid][padmin] < 7)//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (1)
+	    return SCM(playerid, ColorRed, !"Р’С‹ РЅРµ СѓРїРѕР»РЅРѕРјРѕС‡РµРЅС‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ!");
 	if(player[playerid][pakeys] == 0)
-	    return SCM(playerid, ColorGreen, !"Введите команду /alogin!");
+	    return SCM(playerid, ColorGreen, !"Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ /alogin!");
     if(access_check{playerid} == false)
-	    return DialogAdminLogin(playerid);//Вставить в каждую админ-команду (2)
+	    return DialogAdminLogin(playerid);//Р’СЃС‚Р°РІРёС‚СЊ РІ РєР°Р¶РґСѓСЋ Р°РґРјРёРЅ-РєРѕРјР°РЅРґСѓ (2)
 	SetPlayerPos(playerid, 316.524993,-167.706985,999.593750);
 	SetPlayerInterior(playerid, 6);
 	return true;
 }
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ Остальное ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [ РћСЃС‚Р°Р»СЊРЅРѕРµ ] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 main()
 {
 	print("\n---------------------------------------");
